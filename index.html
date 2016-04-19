@@ -1,9 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Climate</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 </head>
 <body>
-Sample
+<div class="container">
+	<div id='graphic'>
+	  <div id='sections'>
+	    <section class="step">
+	      <div class="title">OpenVis Conf 2013</div>
+	        I did what no presenter should ever do: I watched my own talk...
+	    </section>
+	    <section class="step">
+	      <!-- another section -->
+	      <div class="title">OpenVis Conf 2013</div>
+	        I did what no presenter should ever do: I watched my own talk.....
+	    </section>
+	    <section class="step">
+	      <!-- another section -->
+	      <div class="title">OpenVis Conf 2013</div>
+	        I did what no presenter should ever do: I watched my own talk.....
+	    </section>
+	    <section class="step">
+	      <!-- another section -->
+	      <div class="title">OpenVis Conf 2013</div>
+	        I did what no presenter should ever do: I watched my own talk.....
+	    </section>
+	    <section class="step">
+	      <!-- another section -->
+	      <div class="title">OpenVis Conf 2013</div>
+	        I did what no presenter should ever do: I watched my own talk.....
+	    </section>
+	  </div>
+	  <div id='vis'>
+	  </div>
+	</div>
+</div>
 </body>
 </html>
+<script type="text/javascript" src="scroller.js"></script>
+<script type="text/javascript">
+	d3.select(window)
+  .on("scroll.scroller", position);
+</script>
