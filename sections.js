@@ -23,16 +23,24 @@ var scrollVis = function() {
 
   /* TODO Variables for each visualization */
 
+  var co2Data;
+
   var xScale = d3.scale.linear()
-    .domain([0, 20])
+    .domain([0,20])
     .range([0, width]);
+
+  // var xScaleOrdinal = d3.scale.ordinal()
+  //   .domain(["Japan", "India", "China", "USA"])
+  //   .rangePoints([0, width]);
 
   var xAxisBar = d3.svg.axis()
     .scale(xScale)
-    .orient("bottom");
+    .orient("bottom")
+    .tickFormat("");
 
   var yScale = d3.scale.linear()
-    .range([0, width]);
+    .domain([0,20])
+    .range([height, 0]);
 
   // main svg used for visualization
   var svg = null;
@@ -75,7 +83,10 @@ var scrollVis = function() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       // TODO perform some preprocessing on raw data
-      var co2Data = [10,20,30]//;
+      co2Data = d3.nest().key(function(d) { return d.year; })
+      .sortKeys(d3.ascending)
+      .entries(rawData);
+      console.log(co2Data);
 
       setupVis(co2Data);
 
@@ -162,77 +173,49 @@ var scrollVis = function() {
    */
   var SECTION_1_SHOWING = false;
   var CURRENT_YEAR = 1990;
-  var data = {
-  "1990": [{
-    "x": 1,
-    "y": 18
-  }, {
-    "x": 3,
-    "y": 18
-  }, {
-    "x": 5,
-    "y": 18
-  }],
-  "1991": [{
-    "x": 7,
-    "y": 18
-  }, {
-    "x": 9,
-    "y": 18
-  }, {
-    "x": 11,
-    "y": 18
-  }],
-  "1992": [{
-    "x": 13,
-    "y": 18
-  }, {
-    "x": 17,
-    "y": 18
-  }, {
-    "x": 19,
-    "y": 18
-  }],
-  "1993": [{
-    "x": 20,
-    "y": 18
-  }, {
-    "x": 19,
-    "y": 18
-  }, {
-    "x": 20,
-    "y": 18
-  }]
-}
-var years = [1990,1991,1992,1993,1994,1995,1996,1997];
+
   function showCountryEmissions() {
+    var counter = -1;
+    var newData = co2Data[0].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,21);
+    console.log(newData);
     if(!SECTION_1_SHOWING) {
       var countryIcon = g.selectAll("image")
-        .data(data[CURRENT_YEAR])
+        .data(newData)
         .enter()
-        .append("svg:image");
-
-      var iconAttributes = countryIcon
+        .append("svg:image")
         .attr("xlink:href","img/country.svg")
-        .attr('x',function(d) { return xScale(d.x)-10; })
-        .attr('y',function(d) { return xScale(18); })
+        .attr('x',function(d) { counter++; return xScale(counter)-20; })
+        .attr('y',function(d) { return yScale(-0.5); })
         .attr('width', 20)
         .attr('height', 20)
         .attr('class','graph-icon')
         .style("fill", "green");
+
+      counter = -1;
+
+      var countryLabels = g
+        .data(newData)
+        .enter()
+        .append("text")
+        .text(function(d) { return d.country; })
+        .attr('x',function(d) { counter++; return xScale(counter)-20; })
+        .attr('y',function(d) { return yScale(1.5); })
+        
+        console.log(counter);
+
+
         SECTION_1_SHOWING = true;
-        console.log(CURRENT_YEAR);
-        // alert('1st time');
+        // console.log(CURRENT_YEAR);
+        console.log("Created "+countryIcon[0].length+" images");
     } else {
-      console.log(CURRENT_YEAR);
+      // console.log(CURRENT_YEAR);
       var smokes = g
       .append("image")
-      .data(data[CURRENT_YEAR]);
-
+      .data(co2Data);
       var smokeAttributes = smokes
       .attr("xlink:href","img/co2.svg")
-      .attr('x',function(d) { return xScale(d.x)-10; })
-      .attr('y',function(d) { return xScale(13); })
+      .attr('x',function(d) { return xScale(parseInt(d.co2))-10 || 0; })
+      .attr('y',function(d) { return yScale(2); })
       .attr('width',30)
       .attr('height',30)
       .attr('class','smoke');
@@ -270,7 +253,8 @@ var years = [1990,1991,1992,1993,1994,1995,1996,1997];
     var scrolledSections = d3.range(lastIndex + sign, activeIndex + sign, sign);
     scrolledSections.forEach(function(i) {
       activateFunctions[i]();
-      CURRENT_YEAR = years[activeIndex+1];
+      console.log(activeIndex);
+      // CURRENT_YEAR = years[activeIndex+1];
     });
     lastIndex = activeIndex;
   };
@@ -329,4 +313,4 @@ function display(data) {
 }
 
 // load data and display
-d3.csv("data/sampledata.csv", display);
+d3.csv("data/co2_data.csv", display);
