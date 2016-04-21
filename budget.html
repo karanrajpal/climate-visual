@@ -1,0 +1,204 @@
+
+<html>
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+	<style>
+      .d3-tip {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 2px;
+      }
+      path {
+        stroke: steelblue;
+        stroke-width: 3;
+        fill: none;
+      }
+      .axis path, 
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+      .datapoint{fill: black;}
+      .datapoint:hover{
+	 	fill:grey; opacity: 2; r: 20; }
+      
+      .xlabel, .ylabel {
+        font-weight:bold;
+		font-size:15px;
+      }
+      .graphtitle{
+      	font-weight:bold;
+		font-size:20px;
+      }
+    </style>
+</head>
+ 
+<body>
+<div id="line" class="graph"></div>
+<script>
+
+function plot(data) {
+   	var height = 500;
+	var width = 800;
+	var padding = 60;
+
+	var a = d3.rgb(0,0,255);
+	var b = d3.rgb(255,0,0);
+
+
+    var xScale = d3.scale.linear()
+		.domain(d3.extent(emissions, function (d) {
+			return d.x;}))
+		.range([padding, width - padding]);
+	
+	var	yScale = d3.scale.linear()
+		.domain([0,1000])
+		.range([height - padding, padding]);
+
+    var xAxis = d3.svg.axis().scale(xScale)
+		.orient("bottom").ticks(10);
+
+	var yAxis = d3.svg.axis().scale(yScale)
+	    .orient("left");
+    var svg = d3.select("#line")
+    	.append("svg")
+    	.attr("height", height)
+    	.attr("width", width);
+
+    var defs = svg.append("defs");
+
+	var linearGradient = defs.append("linearGradient")
+						.attr("id","linearColor")
+						.attr("x1","0%")
+						.attr("y1","0%")
+						.attr("x2","100%")
+						.attr("y2","0%");
+
+	var stop1 = linearGradient.append("stop")
+				.attr("offset","0%")
+				.style("stop-color",a.toString());
+
+	var stop2 = linearGradient.append("stop")
+				.attr("offset","100%")
+				.style("stop-color",b.toString());
+
+	 
+    // draw the line
+    var line = d3.svg.line()
+		.x(function(d) { return xScale(d.Year); } )
+		.y(function(d) { return yScale(d.CUMULATIVE_EMISSIONS); } );
+
+	//draw area
+	var area = d3.svg.area()
+		.x(function (d) { return xScale(d.Year); })
+		.y0(function (d) { return yScale(0); })
+		.y1(function (d) { return yScale(d.CUMULATIVE_EMISSIONS); });
+
+    //Mouseover tip
+    var tip = d3.tip()
+		.attr('class', 'd3-tip')
+		.offset([120, 40])
+		.html(function(d) {
+	    	return "<strong>" + " Year:&nbsp</strong>" +
+                d.Year +"</br>"+" Cumulative emission:&nbsp" 
+			+ 	d.CUMULATIVE_EMISSIONS + "<br>";
+	});
+
+    svg.call(tip);
+
+    // add the x axis and x-label
+    svg.append("g")
+    	.attr("transform", "translate(0," + (height - padding) + ")")
+    	.attr("class", "axis")
+		.call(xAxis)
+		.selectAll("text")
+	  	.attr("y", 9)
+	  	.attr("x", 9)
+	  	.attr("dy", ".35em")
+	  	.attr("transform", "rotate(30)")
+	  	.style("text-anchor", "start");;
+   
+    svg.append("text")
+	  .attr("class", "xlabel")
+	  .attr("text-anchor", "middle")
+	  .attr("x", width / 2)
+	  .attr("y", height)
+	  .text("YEAR");
+
+    // add the y axis and y-label
+    svg.append("g")
+	  .attr("class", "axis")
+	  .attr("transform", "translate(" + padding + ",0)")
+	  .call(yAxis);
+
+    svg.append("text")
+	  .attr("class", "ylabel")
+	  .attr("y", 0) 
+	  .attr("x", -230)
+	  .attr("dy", "1em")
+	  .attr("transform", "rotate(-90)")
+	  .style("text-anchor", "middle")
+	  .text("CUMULATIVE EMISSIONS (PtC)");
+
+    svg.append("text")
+	  .attr("class", "graphtitle")
+	  .attr("y", 10)
+	  .attr("x", width/2)
+	  .style("text-anchor", "middle")
+	  .attr("transform", "translate(0,10)")
+	  .text("Carbon Budget");
+
+    // draw the line
+    svg.append("path")
+	  .attr("d", line(data))
+	  .style("stroke","url(#" + linearGradient.attr("id") + ")");
+
+    svg.selectAll(".dot")
+	  .data(data)
+	  .enter().append("circle")
+	  .attr('class', 'datapoint')
+	  .attr('cx', function(d) { return xScale(d.Year); })
+	  .attr('cy', function(d) { return yScale(d.CUMULATIVE_EMISSIONS); })
+	  .attr('r', 6)
+	  .style("fill","black")
+	  .style("stroke","black")
+	  .attr('stroke-width', '3')
+	  .on('mouseover', tip.show)
+	  .on('mouseout', tip.hide);
+
+	  //draw area
+	 svg.append("path").attr("d", area(data))
+		.style("fill","url(#" + linearGradient.attr("id") + ")")
+		.style("opacity", 0.5)
+		.style("stroke","url(#" + linearGradient.attr("id") + ")");
+}
+// Read in .csv data and make graph
+d3.csv("carbon_budget.csv",function(error, data) {
+	if (error) {console.log(error);}
+	data= data.filter(function(row) {
+        return row['Year'] == '2011' || row['Year'] == '2015'|| row['Year'] == '2020'|| row['Year'] == '2025'|| row['Year'] == '2030'|| row['Year'] == '2035'|| row['Year'] == '2040'|| row['Year'] == '2045';
+    })
+	years = data;
+	emissions = years.map(function (year) {
+		// Create shorter variable names
+		return {
+			x: Number(year["Year"]),
+		 	y: Number(year["CUMULATIVE_EMISSIONS"]),
+		};
+	})
+		.filter(function (emission) {
+			return ! isNaN(emission.x) && ! isNaN(emission.y);
+		});
+	plot(data);
+}); 
+	
+</script>
+</body>
+</html>
