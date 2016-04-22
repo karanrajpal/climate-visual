@@ -1,10 +1,10 @@
 /* Scroller code */
 .container {
-  width: 890px;
+  /*background-color: purple;*/
 }
 
 #graphic {
-  padding-top: 60px;
+  padding-top: 10px;
 }
 
 
@@ -80,9 +80,10 @@
 /* Styling */
 
 .container {
-  width: 890px;
+  width: 1300px;
 }
 #graphic {
+  margin: 0 auto;
 }
 .title {
   font-weight: bold;
@@ -91,9 +92,12 @@
 .graph-icon {
   dominant-baseline: middle;
 }
+.country-text {
+  writing-mode: tb;
+}
 
 .smoke {
-   -webkit-animation: smoking 2s infinite;
+   -webkit-animation: smoking 20s infinite;
 }
 
 @-webkit-keyframes smoking {

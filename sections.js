@@ -8,9 +8,9 @@
 var scrollVis = function() {
   // constants to define the size
   // and margins of the vis area.
-  var width = 600;
+  var width = 900;
   var height = 520;
-  var margin = {top:0, left:20, bottom:40, right:10};
+  var margin = {top:0, left:40, bottom:100, right:40};
 
   // Keep track of which visualization
   // we are on and which was the last
@@ -26,7 +26,11 @@ var scrollVis = function() {
   var co2Data;
 
   var xScale = d3.scale.linear()
-    .domain([0,20])
+    .domain([0,15])
+    .range([0, width]);
+
+    var co2Scale = d3.scale.sqrt()
+    .domain([0,200000])
     .range([0, width]);
 
   // var xScaleOrdinal = d3.scale.ordinal()
@@ -36,7 +40,8 @@ var scrollVis = function() {
   var xAxisBar = d3.svg.axis()
     .scale(xScale)
     .orient("bottom")
-    .tickFormat("");
+    .tickFormat("")
+    .ticks(0);
 
   var yScale = d3.scale.linear()
     .domain([0,20])
@@ -86,7 +91,7 @@ var scrollVis = function() {
       co2Data = d3.nest().key(function(d) { return d.year; })
       .sortKeys(d3.ascending)
       .entries(rawData);
-      console.log(co2Data);
+      // console.log(co2Data);
 
       setupVis(co2Data);
 
@@ -109,7 +114,7 @@ var scrollVis = function() {
     // axis
     g.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(0," + (height-60) + ")")
       .call(xAxisBar);
 
     g.select(".x.axis")
@@ -126,15 +131,11 @@ var scrollVis = function() {
   setupSections = function() {
     // activateFunctions are called each
     // time the active section changes
-    activateFunctions[0] = showCountryEmissions;
-    activateFunctions[1] = showCountryEmissions;
-    activateFunctions[2] = showCountryEmissions;
-    activateFunctions[3] = showCountryEmissions;
-    activateFunctions[4] = showCountryEmissions;
-    activateFunctions[5] = showCountryEmissions;
-    activateFunctions[6] = showCountryEmissions;
-    activateFunctions[7] = showCountryEmissions;
-    activateFunctions[8] = showCountryEmissions;
+    for(var i = 0; i < 22; i++) {
+      activateFunctions[i] = showCountryEmissions
+    }
+    // activateFunctions[22] = showCarbonBudget;
+    // activateFunctions[23] = showCarbonBudget;
 
     // updateFunctions are called while
     // in a particular section to update
@@ -142,7 +143,7 @@ var scrollVis = function() {
     // Most sections do not need to be updated
     // for all scrolling and so are set to
     // no-op functions.
-    for(var i = 0; i < 9; i++) {
+    for(var i = 0; i < 22; i++) {
       updateFunctions[i] = function() {};
     }
     updateFunctions[7] = function() {};
@@ -172,53 +173,66 @@ var scrollVis = function() {
    *
    */
   var SECTION_1_SHOWING = false;
+  var IS_SMOKE_SHOWING = false;
   var CURRENT_YEAR = 1990;
 
   function showCountryEmissions() {
     var counter = -1;
-    var newData = co2Data[0].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,21);
-    console.log(newData);
+    var newData = co2Data[activeIndex].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,16);
+    // console.log(newData);
+    console.log("took data of "+activeIndex);
     if(!SECTION_1_SHOWING) {
       var countryIcon = g.selectAll("image")
         .data(newData)
         .enter()
         .append("svg:image")
         .attr("xlink:href","img/country.svg")
-        .attr('x',function(d) { counter++; return xScale(counter)-20; })
-        .attr('y',function(d) { return yScale(-0.5); })
+        .attr('x',function(d) { counter++; return xScale(counter); })
+        .attr('y',function(d) { return yScale(2); })
         .attr('width', 20)
         .attr('height', 20)
         .attr('class','graph-icon')
         .style("fill", "green");
 
-      counter = -1;
 
-      var countryLabels = g
-        .data(newData)
-        .enter()
-        .append("text")
-        .text(function(d) { return d.country; })
-        .attr('x',function(d) { counter++; return xScale(counter)-20; })
-        .attr('y',function(d) { return yScale(1.5); })
-        
-        console.log(counter);
+        var counter2 = -1;
+        newData.forEach(function(d) {
+          g.append("text")
+          .text( d.country )
+          .attr('x',function(d) { counter2++; return xScale(counter2); })
+          .attr('y',function(d) { return yScale(1); })
+          .attr('class','country-text');
+        });
 
 
         SECTION_1_SHOWING = true;
         // console.log(CURRENT_YEAR);
         console.log("Created "+countryIcon[0].length+" images");
     } else {
-      // console.log(CURRENT_YEAR);
-      var smokes = g
-      .append("image")
-      .data(co2Data);
-      var smokeAttributes = smokes
-      .attr("xlink:href","img/co2.svg")
-      .attr('x',function(d) { return xScale(parseInt(d.co2))-10 || 0; })
-      .attr('y',function(d) { return yScale(2); })
-      .attr('width',30)
-      .attr('height',30)
-      .attr('class','smoke');
+      if(!IS_SMOKE_SHOWING) {
+        var counter2 = -1;
+        newData.forEach(function(d) {
+        IS_SMOKE_SHOWING = true;
+        g.append("image")
+        .attr("xlink:href","img/co2.svg")
+        .attr('x',function(d) { counter2++; return xScale(counter2); })
+        .attr('y',function(d) { return yScale(5.5); })
+        .attr('width',co2Scale(d.co2))
+        .attr('height',co2Scale(d.co2))
+        .attr('class','smoke');
+        });
+      } else {
+        g.selectAll('.smoke').each(function(d,i) {
+          var elt = d3.select(this);
+          elt.attr('width',co2Scale(newData[i].co2))
+          .attr('height',co2Scale(newData[i].co2))
+        });
+
+        g.selectAll('.country-text').each(function(d,i) {
+          var elt = d3.select(this);
+          elt.text( newData[i].country )
+        });
+      }
     }
   }
 
@@ -253,7 +267,7 @@ var scrollVis = function() {
     var scrolledSections = d3.range(lastIndex + sign, activeIndex + sign, sign);
     scrolledSections.forEach(function(i) {
       activateFunctions[i]();
-      console.log(activeIndex);
+      console.log("ActiveIndex "+activeIndex);
       // CURRENT_YEAR = years[activeIndex+1];
     });
     lastIndex = activeIndex;
@@ -300,6 +314,7 @@ function display(data) {
   // setup event handling
   scroll.on('active', function(index) {
     // highlight current step text
+    // console.log("ok" + index);
     d3.selectAll('.step')
       .style('opacity',  function(d,i) { return i == index ? 1 : 0.1; });
 
