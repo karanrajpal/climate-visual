@@ -94,6 +94,7 @@
 }
 .country-text {
   writing-mode: tb;
+  -webkit-transition: all 0.5s;
 }
 
 .smoke {
@@ -144,3 +145,12 @@ fill:grey; opacity: 2; r: 20; }
     font-weight:bold;
     font-size:20px;
   }
+
+#SAMPLE {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  background-color: black;
+  padding: 20px;
+  color: white;
+}

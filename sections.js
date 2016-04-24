@@ -136,13 +136,13 @@ var scrollVis = function() {
   setupSections = function() {
     // activateFunctions are called each
     // time the active section changes
-    for(var i = 0; i < 11; i++) {
+    for(var i = 0; i < 12; i++) {
       activateFunctions[i] = function() {
         showCountryEmissions();
-        line();
+        // line();
       }
     }
-    for(var i = 11; i < 28; i++) {
+    for(var i = 12; i < 28; i++) {
       activateFunctions[i] = showCarbonBudget;
     }
 
@@ -186,12 +186,21 @@ var scrollVis = function() {
   var CURRENT_YEAR = 1990;
 
   function showCountryEmissions() {
+    if(activeIndex>12) {
+      return;
+    }
     var counter = -1;
-    var newData = co2Data[activeIndex].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
+    console.log('hi');
+    var newData = co2Data[activeIndex*2].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
     var newRank = [];
+    var newCo2 = [];
     newData.forEach(function(d) {
       newRank.push(d.country);
     });
+    newData.forEach(function(d) {
+      newCo2.push(d.year);
+    });
+    document.getElementById('SAMPLE').innerHTML = newRank.join(' ')+'<br>'+newCo2.join(' ');
     if(SECTION_2_SHOWING) {
       document.getElementById('vis2').style.display = 'none';
       document.getElementById('vis').style.display = 'inline-block';
@@ -206,8 +215,8 @@ var scrollVis = function() {
         .attr('y',function(d) { return yScaleCo2(-6.5); })
         .attr('width', 20)
         .attr('height', 20)
-        .attr('class','graph-icon')
-        .style("stroke", "green");
+        .attr('rank',counter)
+        .attr('class','graph-icon');
 
         var counter2 = -1;
         newData.forEach(function(d) {
@@ -217,7 +226,7 @@ var scrollVis = function() {
           .attr('y',function(d) { return yScaleCo2(-10.0); })
           .attr('class','country-text')
           .attr('rank',counter2)
-          .on('click',function(d) { showHistogram(d.year, d.country); });
+          .on('click',function(d) {  });
         });
 
         SECTION_1_SHOWING = true;
@@ -245,7 +254,6 @@ var scrollVis = function() {
         });
       } else {
         newData.forEach(function(d,i) {
-          // console.log('d and i'+d+' and '+i);
           var data = d;
           g.selectAll('.smoke'+i).each(function(d,j) {
             var elt = d3.select(this);
@@ -254,21 +262,72 @@ var scrollVis = function() {
           });
         });
 
-
         var existingElements = g.selectAll('.country-text');
-        for (var i = 0; i < newRank.length; i++) {
-          for (var j = 0; j < existingElements[0].length; j++) {
-            if(existingElements[0][j].textContent==newRank[i]) {
-              // Element is already somewhere in the list - so update rank and position
-              existingElements[0][j].attr('rank',15);
-            }
+        var existingIcons = g.selectAll('.graph-icon');
+        var oldRank = [];
+        for (var i = 0; i < existingElements[0].length; i++) {
+          oldRank.push(existingElements[0][i].textContent);
+        }
+
+        for (var i = 0; i < existingElements[0].length; i++) {
+          var nR = newRank.indexOf(existingElements[0][i].textContent);
+          if(nR>=0) {
+            existingElements[0][i].setAttribute('rank',nR);
+            existingIcons[0][i].setAttribute('rank',nR);
+          } else {
+            existingElements[0][i].setAttribute('rank',15);
+            existingIcons[0][i].setAttribute('rank',15);
           }
         }
 
-        // g.selectAll('.country-text').each(function(d,i) {
-        //   var elt = d3.select(this);
-        //   elt.text( newData[i].country );
-        // });
+        for (var i = 0; i < newRank.length; i++) {
+          if(oldRank.indexOf(newRank[i])<0) {
+            // Element doesn't exist so create it and assign it's rank
+            g.append("text")
+            .text( newRank[i] )
+            .attr('x',function(d) { return xScale(400)+19; })
+            .attr('y',function(d) { return yScaleCo2(-10.0); })
+            .attr('class','country-text')
+            .attr('rank',i)
+            .on('click',function(d) {  });
+
+            g.append("svg:image")
+            .attr("xlink:href","img/country.svg")
+            .attr('x',function(d) { return xScale(400)+10; })
+            .attr('y',function(d) { return yScaleCo2(-6.5); })
+            .attr('width', 20)
+            .attr('height', 20)
+            .attr('rank',i)
+            .attr('class','graph-icon');
+          }
+        }
+
+        setTimeout(function() {
+          var transition = svg.transition().duration(750),
+          delay = function(d, i) { return i * 30; };
+          transition.selectAll('.country-text')
+          .delay(delay)
+          .attr('x', function(d,i) { var elt = d3.select(this); return xScale(elt.attr('rank'))+19; })
+
+          transition.selectAll('.graph-icon')
+          .delay(delay)
+          .attr('x', function(d,i) { var elt = d3.select(this); return xScale(elt.attr('rank'))+10; })
+        },1);
+
+        setTimeout(function() {
+            existingElements.each(function(d,i) {
+              var elt = d3.select(this);
+              if(elt.attr('rank')>14) {
+                elt.remove();
+              }
+            });
+            existingIcons.each(function(d,i) {
+              var elt = d3.select(this);
+              if(elt.attr('rank')>14) {
+                elt.remove();
+              }
+            });
+        },500);
       }
     }
   }
