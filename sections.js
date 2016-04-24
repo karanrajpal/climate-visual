@@ -137,7 +137,10 @@ var scrollVis = function() {
     // activateFunctions are called each
     // time the active section changes
     for(var i = 0; i < 11; i++) {
-      activateFunctions[i] = showCountryEmissions;
+      activateFunctions[i] = function() {
+        showCountryEmissions();
+        line();
+      }
     }
     for(var i = 11; i < 28; i++) {
       activateFunctions[i] = showCarbonBudget;
@@ -185,6 +188,10 @@ var scrollVis = function() {
   function showCountryEmissions() {
     var counter = -1;
     var newData = co2Data[activeIndex].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
+    var newRank = [];
+    newData.forEach(function(d) {
+      newRank.push(d.country);
+    });
     if(SECTION_2_SHOWING) {
       document.getElementById('vis2').style.display = 'none';
       document.getElementById('vis').style.display = 'inline-block';
@@ -202,7 +209,6 @@ var scrollVis = function() {
         .attr('class','graph-icon')
         .style("stroke", "green");
 
-
         var counter2 = -1;
         newData.forEach(function(d) {
           g.append("text")
@@ -210,9 +216,9 @@ var scrollVis = function() {
           .attr('x',function(d) { counter2++; return xScale(counter2)+19; })
           .attr('y',function(d) { return yScaleCo2(-10.0); })
           .attr('class','country-text')
+          .attr('rank',counter2)
           .on('click',function(d) { showHistogram(d.year, d.country); });
         });
-
 
         SECTION_1_SHOWING = true;
     } else {
@@ -237,56 +243,6 @@ var scrollVis = function() {
             // .style('animation-duration',30/co2Scale(d.co2)+'s');
           };
         });
-        // var ANIMATION_COUNTER = -1;
-        // var ANIMATION_COUNTER_2 = -1;
-        // setInterval(function() {
-        //     ANIMATION_COUNTER = (ANIMATION_COUNTER+1)%5;
-        //     g.selectAll('.smoke'+ANIMATION_COUNTER).each(function(d,i) {
-        //       var elt = d3.select(this);
-        //       elt.attr('y', function(d,i) { return yScaleCo2(this.getAttribute('co2')); })
-        //       .style('-webkit-transition','all 1000ms')
-        //       .style('opacity', 0)
-        //       .style('height',xScale(0.6));
-        //     });
-        // },200);
-        // // setTimeout(function() {
-        //   setInterval(function() {
-        //       ANIMATION_COUNTER_2 = (ANIMATION_COUNTER_2+1)%5;
-        //       g.selectAll('.smoke'+ANIMATION_COUNTER_2).each(function(d,i) {
-        //         var elt = d3.select(this);
-        //         elt.attr('y', function(d,i) { return yScaleCo2(-3); })
-        //         .style('-webkit-transition','all 0s')
-        //         .style('opacity', 1)
-        //         .style('height',0);
-        //       });
-        //   },1200);
-        // },1000);
-        // setInterval(function() {
-        //   for (var i = 0; i < 5; i++) {
-        //     ANIMATION_COUNTER = (ANIMATION_COUNTER+1)%5;
-        //     g.selectAll('.smoke'+ANIMATION_COUNTER).each(function(d,i) {
-        //       var elt = d3.select(this);
-        //       elt.attr('y', function(d,i) { return yScaleCo2(this.getAttribute('co2')); })
-        //       .style('-webkit-transition','all 1000ms')
-        //       .style('-webkit-transition-delay',ANIMATION_COUNTER/5+'s')
-        //       .style('opacity', 0)
-        //       .style('height',xScale(0.6));
-        //     });
-        //   }
-        // },1000);
-        // setInterval(function() {
-        //   for (var i = 0; i < 5; i++) {
-        //     ANIMATION_COUNTER = (ANIMATION_COUNTER+1)%5;
-        //     g.selectAll('.smoke'+ANIMATION_COUNTER).each(function(d,i) {
-        //       var elt = d3.select(this);
-        //       elt.attr('y', function(d,i) { return yScaleCo2(this.getAttribute('co2')); })
-        //       .style('-webkit-transition','all 0ms')
-        //       .style('-webkit-transition-delay',ANIMATION_COUNTER/5+'s')
-        //       .style('opacity', 1)
-        //       .style('height',xScale(0));
-        //     });
-        //   }
-        // },1000);
       } else {
         newData.forEach(function(d,i) {
           // console.log('d and i'+d+' and '+i);
@@ -296,15 +252,34 @@ var scrollVis = function() {
             elt.attr('width',co2Scale(data.co2))
               .attr('height',co2Scale(data.co2))
           });
-        }); 
-
-        g.selectAll('.country-text').each(function(d,i) {
-          var elt = d3.select(this);
-          elt.text( newData[i].country );
         });
+
+
+        var existingElements = g.selectAll('.country-text');
+        for (var i = 0; i < newRank.length; i++) {
+          for (var j = 0; j < existingElements[0].length; j++) {
+            if(existingElements[0][j].textContent==newRank[i]) {
+              // Element is already somewhere in the list - so update rank and position
+              existingElements[0][j].attr('rank',15);
+            }
+          }
+        }
+
+        // g.selectAll('.country-text').each(function(d,i) {
+        //   var elt = d3.select(this);
+        //   elt.text( newData[i].country );
+        // });
       }
     }
   }
+
+
+  // Insert line global varaible here
+  var svg_showing = false;
+  // Insert line here
+  
+
+
 
   var insertRuleForHeight = function(co2,index) {
     var dynamicStyleSheet = document.getElementById('dynamic');

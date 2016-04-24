@@ -1,4 +1,4 @@
-Country,Year,Total CO2 (excluding Land-Use Change and Forestry) (MtCO2),Electricity/Heat (MtCO2),Manufacturing/Construction (MtCO2),Transportation (MtCO2),Other Fuel Combustion (MtCO2e),Fugitive Emissions (MtCO2e),Industrial Processes (MtCO2e),Agriculture (MtCO2e),Waste (MtCO2e),Land-Use Change and Forestry (MtCO2),Bunker Fuels (MtCO2)
+country,year,co2,Electricity/Heat (MtCO2),Manufacturing/Construction (MtCO2),Transportation (MtCO2),Other Fuel Combustion (MtCO2e),Fugitive Emissions (MtCO2e),Industrial Processes (MtCO2e),Agriculture (MtCO2e),Waste (MtCO2e),Land-Use Change and Forestry (MtCO2),Bunker Fuels (MtCO2)
 Afghanistan,1990,2.99,,,,,1.26,0.06,7.35,4.04,0.66,
 Afghanistan,1991,2.74,,,,,1.02,0.06,7.64,4.22,0.00,
 Afghanistan,1992,1.43,,,,,0.60,0.06,7.64,4.40,0.00,
