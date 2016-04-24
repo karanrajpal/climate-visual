@@ -138,7 +138,7 @@ var scrollVis = function() {
     // time the active section changes
     for(var i = 0; i < 12; i++) {
       activateFunctions[i] = function() {
-        line(i+1990);
+        line();
         showCountryEmissions();
       }
     }
@@ -182,6 +182,7 @@ var scrollVis = function() {
    *
    */
   var SECTION_1_SHOWING = false;
+  var SECTION_LINE_SHOWING = false;
   var IS_SMOKE_SHOWING = false;
   var CURRENT_YEAR = 1990;
 
@@ -190,7 +191,6 @@ var scrollVis = function() {
       return;
     }
     var counter = -1;
-    console.log('hi');
     var newData = co2Data[activeIndex*2].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
     var newRank = [];
     var newCo2 = [];
@@ -204,6 +204,7 @@ var scrollVis = function() {
     if(SECTION_2_SHOWING) {
       document.getElementById('vis2').style.display = 'none';
       document.getElementById('vis').style.display = 'inline-block';
+      document.getElementById('vis1').style.display = 'block';
     }
     if(!SECTION_1_SHOWING) {
       var countryIcon = g.selectAll("image")
@@ -457,17 +458,23 @@ var scrollVis = function() {
     gy.selectAll("text")
         .attr("x", -40)
         .attr("dy", -4);
+      FILE_LOADED = true;
   });
 }
 
-function line(year){
+var FILE_LOADED = false;
+
+function line(){
+  var year = activeIndex*2 + 1990;
   // Adds the svg canvas
-  if(SECTION_1_SHOWING == false) {
+  if(SECTION_LINE_SHOWING == false) {
+    // debugger;
     setupLine(year);
     console.log("SETTING UP");
+    SECTION_LINE_SHOWING = true;
   }
-  else{
-    lineSvg.selectAll("line2")
+  else if(FILE_LOADED==true){
+    lineSvg.selectAll(".line2")
     .attr("opacity","0");
 
     for(var i=1990;i<year+1;i++){
@@ -664,7 +671,8 @@ function line(year){
     /* Hide previous svg */
     /* Create line graph */
     document.getElementById('vis').style.display = 'none';
-      document.getElementById('vis2').style.display = 'inline-block';
+    document.getElementById('vis1').style.display = 'none';
+    document.getElementById('vis2').style.display = 'inline-block';
   if(!SECTION_2_SHOWING) {
       SECTION_2_SHOWING = true;
     
