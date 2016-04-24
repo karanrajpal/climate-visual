@@ -26,12 +26,12 @@ var scrollVis = function() {
   var co2Data;
 
   var xScale = d3.scale.linear()
-    .domain([0,15])
+    .domain([0,10])
     .range([0, width]);
 
     var co2Scale = d3.scale.sqrt()
-    .domain([0,200000])
-    .range([0, width]);
+    .domain([0,5000])
+    .range([0, 100]);
 
   // var xScaleOrdinal = d3.scale.ordinal()
   //   .domain(["Japan", "India", "China", "USA"])
@@ -43,12 +43,17 @@ var scrollVis = function() {
     .tickFormat("")
     .ticks(0);
 
-  var yScale = d3.scale.linear()
-    .domain([0,20])
-    .range([height, 0]);
+  var yScaleCo2 = d3.scale.linear()
+    .domain([0,50])
+    .range([height-margin.bottom, margin.top]);
+
+  var yScaleCo2Log = d3.scale.sqrt()
+  .domain([0,100])
+  .range([height-margin.bottom, margin.top]);
 
   // main svg used for visualization
   var svg = null;
+  var svg2 = null;
 
   // d3 selection that will be used
   // for displaying visualizations
@@ -131,11 +136,12 @@ var scrollVis = function() {
   setupSections = function() {
     // activateFunctions are called each
     // time the active section changes
-    for(var i = 0; i < 22; i++) {
-      activateFunctions[i] = showCountryEmissions
+    for(var i = 0; i < 11; i++) {
+      activateFunctions[i] = showCountryEmissions;
     }
-    // activateFunctions[22] = showCarbonBudget;
-    // activateFunctions[23] = showCarbonBudget;
+    for(var i = 11; i < 28; i++) {
+      activateFunctions[i] = showCarbonBudget;
+    }
 
     // updateFunctions are called while
     // in a particular section to update
@@ -178,63 +184,352 @@ var scrollVis = function() {
 
   function showCountryEmissions() {
     var counter = -1;
-    var newData = co2Data[activeIndex].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,16);
-    // console.log(newData);
-    console.log("took data of "+activeIndex);
+    var newData = co2Data[activeIndex].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
+    if(SECTION_2_SHOWING) {
+      document.getElementById('vis2').style.display = 'none';
+      document.getElementById('vis').style.display = 'inline-block';
+    }
     if(!SECTION_1_SHOWING) {
       var countryIcon = g.selectAll("image")
         .data(newData)
         .enter()
         .append("svg:image")
         .attr("xlink:href","img/country.svg")
-        .attr('x',function(d) { counter++; return xScale(counter); })
-        .attr('y',function(d) { return yScale(2); })
+        .attr('x',function(d) { counter++; return xScale(counter)+10; })
+        .attr('y',function(d) { return yScaleCo2(-6.5); })
         .attr('width', 20)
         .attr('height', 20)
         .attr('class','graph-icon')
-        .style("fill", "green");
+        .style("stroke", "green");
 
 
         var counter2 = -1;
         newData.forEach(function(d) {
           g.append("text")
           .text( d.country )
-          .attr('x',function(d) { counter2++; return xScale(counter2); })
-          .attr('y',function(d) { return yScale(1); })
-          .attr('class','country-text');
+          .attr('x',function(d) { counter2++; return xScale(counter2)+19; })
+          .attr('y',function(d) { return yScaleCo2(-10.0); })
+          .attr('class','country-text')
+          .on('click',function(d) { showHistogram(d.year, d.country); });
         });
 
 
         SECTION_1_SHOWING = true;
-        // console.log(CURRENT_YEAR);
-        console.log("Created "+countryIcon[0].length+" images");
     } else {
       if(!IS_SMOKE_SHOWING) {
         var counter2 = -1;
         newData.forEach(function(d) {
-        IS_SMOKE_SHOWING = true;
-        g.append("image")
-        .attr("xlink:href","img/co2.svg")
-        .attr('x',function(d) { counter2++; return xScale(counter2); })
-        .attr('y',function(d) { return yScale(5.5); })
-        .attr('width',co2Scale(d.co2))
-        .attr('height',co2Scale(d.co2))
-        .attr('class','smoke');
+          IS_SMOKE_SHOWING = true;
+          // console.log(d.co2 + " is "+ Math.floor(co2Scale(d.co2)));
+          counter2++;
+          // insertRuleForHeight(d.co2,counter2);
+          // for (var i = 0; i < co2Scale(d.co2)/10; i++) {
+          for (var i = 0; i < 1; i++) {
+            var img = g.append("image")
+            .attr("xlink:href","img/co2.svg")
+            .attr('x',function(d) { return xScale(counter2); })
+            .attr('y',(function(d) { return yScaleCo2(-2); }))
+            .attr('width',co2Scale(d.co2))
+            .attr('height',co2Scale(d.co2))
+            .attr('class','smoke smoke'+counter2)
+            .attr('co2',co2Scale(d.co2))
+            .style('animation-delay',0.2*i+'s')
+            // .style('animation-duration',30/co2Scale(d.co2)+'s');
+          };
         });
+        // var ANIMATION_COUNTER = -1;
+        // var ANIMATION_COUNTER_2 = -1;
+        // setInterval(function() {
+        //     ANIMATION_COUNTER = (ANIMATION_COUNTER+1)%5;
+        //     g.selectAll('.smoke'+ANIMATION_COUNTER).each(function(d,i) {
+        //       var elt = d3.select(this);
+        //       elt.attr('y', function(d,i) { return yScaleCo2(this.getAttribute('co2')); })
+        //       .style('-webkit-transition','all 1000ms')
+        //       .style('opacity', 0)
+        //       .style('height',xScale(0.6));
+        //     });
+        // },200);
+        // // setTimeout(function() {
+        //   setInterval(function() {
+        //       ANIMATION_COUNTER_2 = (ANIMATION_COUNTER_2+1)%5;
+        //       g.selectAll('.smoke'+ANIMATION_COUNTER_2).each(function(d,i) {
+        //         var elt = d3.select(this);
+        //         elt.attr('y', function(d,i) { return yScaleCo2(-3); })
+        //         .style('-webkit-transition','all 0s')
+        //         .style('opacity', 1)
+        //         .style('height',0);
+        //       });
+        //   },1200);
+        // },1000);
+        // setInterval(function() {
+        //   for (var i = 0; i < 5; i++) {
+        //     ANIMATION_COUNTER = (ANIMATION_COUNTER+1)%5;
+        //     g.selectAll('.smoke'+ANIMATION_COUNTER).each(function(d,i) {
+        //       var elt = d3.select(this);
+        //       elt.attr('y', function(d,i) { return yScaleCo2(this.getAttribute('co2')); })
+        //       .style('-webkit-transition','all 1000ms')
+        //       .style('-webkit-transition-delay',ANIMATION_COUNTER/5+'s')
+        //       .style('opacity', 0)
+        //       .style('height',xScale(0.6));
+        //     });
+        //   }
+        // },1000);
+        // setInterval(function() {
+        //   for (var i = 0; i < 5; i++) {
+        //     ANIMATION_COUNTER = (ANIMATION_COUNTER+1)%5;
+        //     g.selectAll('.smoke'+ANIMATION_COUNTER).each(function(d,i) {
+        //       var elt = d3.select(this);
+        //       elt.attr('y', function(d,i) { return yScaleCo2(this.getAttribute('co2')); })
+        //       .style('-webkit-transition','all 0ms')
+        //       .style('-webkit-transition-delay',ANIMATION_COUNTER/5+'s')
+        //       .style('opacity', 1)
+        //       .style('height',xScale(0));
+        //     });
+        //   }
+        // },1000);
       } else {
-        g.selectAll('.smoke').each(function(d,i) {
-          var elt = d3.select(this);
-          elt.attr('width',co2Scale(newData[i].co2))
-          .attr('height',co2Scale(newData[i].co2))
-        });
+        newData.forEach(function(d,i) {
+          // console.log('d and i'+d+' and '+i);
+          var data = d;
+          g.selectAll('.smoke'+i).each(function(d,j) {
+            var elt = d3.select(this);
+            elt.attr('width',co2Scale(data.co2))
+              .attr('height',co2Scale(data.co2))
+          });
+        }); 
 
         g.selectAll('.country-text').each(function(d,i) {
           var elt = d3.select(this);
-          elt.text( newData[i].country )
+          elt.text( newData[i].country );
         });
       }
     }
   }
+
+  var insertRuleForHeight = function(co2,index) {
+    var dynamicStyleSheet = document.getElementById('dynamic');
+    if(typeof dynamicStyleTag=='undefined') {
+      var dynamicStyleTag = document.createElement('style');
+      dynamicStyleTag.type = 'text/css';
+      dynamicStyleTag.id = 'dynamic'; 
+      dynamicStyleTag.appendChild(document.createTextNode(""));
+      document.head.appendChild(dynamicStyleTag);
+      dynamicStyleSheet = dynamicStyleTag.sheet;
+    } else {
+      dynamicStyleSheet = document.styleSheets[document.styleSheets.length - 1];
+    }
+
+    dynamicStyleSheet.insertRule('@-webkit-keyframes smoking'+index+' {\
+      0% {\
+        opacity: 1;\
+        transform: translate(none);\
+      }\
+      100% {\
+        opacity: 0.0;\
+        transform: translate(0, -'+yScaleCo2(-co2Scale(co2))/2+'px);\
+      }\
+    }');
+    dynamicStyleSheet.insertRule('.smoke'+index+' {\
+      -webkit-animation: smoking'+index+' linear 2s infinite;\
+    }');
+  }
+
+  /**
+   * showCarbonBudget - initial title
+   *
+   * hides: count title
+   * (no previous step to hide)
+   * shows: intro title
+   *
+   */
+
+   var SECTION_2_SHOWING = false;
+
+   var plotBudget = function(data) {
+      var height = 500;
+      var width = 800;
+      var padding = 60;
+
+  var a = d3.rgb(0,0,255);
+  var b = d3.rgb(255,0,0);
+
+
+    var xScale = d3.scale.linear()
+    .domain(d3.extent(emissions, function (d) {
+      return d.x;}))
+    .range([padding, width - padding]);
+  
+  var yScale = d3.scale.linear()
+    .domain([0,1000])
+    .range([height - padding, padding]);
+
+    var xAxis = d3.svg.axis().scale(xScale)
+    .orient("bottom").ticks(10);
+
+  var yAxis = d3.svg.axis().scale(yScale)
+      .orient("left");
+    var svg = d3.select("#vis2")
+      .append("svg")
+      .attr("height", height)
+      .attr("width", width);
+
+    var defs = svg.append("defs");
+
+  var linearGradient = defs.append("linearGradient")
+            .attr("id","linearColor")
+            .attr("x1","0%")
+            .attr("y1","0%")
+            .attr("x2","100%")
+            .attr("y2","0%");
+
+  var stop1 = linearGradient.append("stop")
+        .attr("offset","0%")
+        .style("stop-color",a.toString());
+
+  var stop2 = linearGradient.append("stop")
+        .attr("offset","100%")
+        .style("stop-color",b.toString());
+
+   
+    // draw the line
+    var line = d3.svg.line()
+    .x(function(d) { return xScale(d.Year); } )
+    .y(function(d) { return yScale(d.CUMULATIVE_EMISSIONS); } );
+
+  //draw area
+  var area = d3.svg.area()
+    .x(function (d) { return xScale(d.Year); })
+    .y0(function (d) { return yScale(0); })
+    .y1(function (d) { return yScale(d.CUMULATIVE_EMISSIONS); });
+
+    //Mouseover tip
+    var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([120, 40])
+    .html(function(d) {
+        return "<strong>" + " Year:&nbsp</strong>" +
+                d.Year +"</br>"+" Cumulative emission:&nbsp" 
+      +   d.CUMULATIVE_EMISSIONS + "<br>";
+  });
+
+    svg.call(tip);
+
+    // add the x axis and x-label
+    svg.append("g")
+      .attr("transform", "translate(0," + (height - padding) + ")")
+      .attr("class", "axis")
+    .call(xAxis)
+    .selectAll("text")
+      .attr("y", 9)
+      .attr("x", 9)
+      .attr("dy", ".35em")
+      .attr("transform", "rotate(30)")
+      .style("text-anchor", "start");;
+   
+    svg.append("text")
+    .attr("class", "xlabel")
+    .attr("text-anchor", "middle")
+    .attr("x", width / 2)
+    .attr("y", height)
+    .text("YEAR");
+
+    // add the y axis and y-label
+    svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(" + padding + ",0)")
+    .call(yAxis);
+
+    svg.append("text")
+    .attr("class", "ylabel")
+    .attr("y", 0) 
+    .attr("x", -230)
+    .attr("dy", "1em")
+    .attr("transform", "rotate(-90)")
+    .style("text-anchor", "middle")
+    .text("CUMULATIVE EMISSIONS (PtC)");
+
+    svg.append("text")
+    .attr("class", "graphtitle")
+    .attr("y", 10)
+    .attr("x", width/2)
+    .style("text-anchor", "middle")
+    .attr("transform", "translate(0,10)")
+    .text("Carbon Budget");
+
+    // draw the line
+    svg.append("path")
+    .attr("d", line(data))
+    .style("stroke","url(#" + linearGradient.attr("id") + ")");
+
+    svg.selectAll(".dot")
+    .data(data)
+    .enter().append("circle")
+    .attr('class', 'datapoint')
+    .attr('cx', function(d) { return xScale(d.Year); })
+    .attr('cy', function(d) { return yScale(d.CUMULATIVE_EMISSIONS); })
+    .attr('r', 6)
+    .style("fill","black")
+    .style("stroke","black")
+    .attr('stroke-width', '3')
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide);
+
+    //draw area
+   svg.append("path").attr("d", area(data))
+    .style("fill","url(#" + linearGradient.attr("id") + ")")
+    .style("opacity", 0.5)
+    .style("stroke","url(#" + linearGradient.attr("id") + ")");
+  }
+
+  function showCarbonBudget() {
+    /* Hide previous svg */
+    /* Create line graph */
+    document.getElementById('vis').style.display = 'none';
+      document.getElementById('vis2').style.display = 'inline-block';
+  if(!SECTION_2_SHOWING) {
+      SECTION_2_SHOWING = true;
+    
+      // Read in .csv data and make graph
+      d3.csv("carbon_budget.csv",function(error, data) {
+      if (error) {console.log(error);}
+      data= data.filter(function(row) {
+                    return row['Year'] == '2011' || row['Year'] == '2015'|| row['Year'] == '2020'|| row['Year'] == '2025'|| row['Year'] == '2030'|| row['Year'] == '2035'|| row['Year'] == '2040'|| row['Year'] == '2045';
+        })
+      years = data;
+      emissions = years.map(function (year) {
+        // Create shorter variable names
+        return {
+          x: Number(year["Year"]),
+          y: Number(year["CUMULATIVE_EMISSIONS"]),
+        };
+      })
+        .filter(function (emission) {
+          return ! isNaN(emission.x) && ! isNaN(emission.y);
+        });
+      plotBudget(data);
+    });
+  } else {
+    // // Read in .csv data and make graph
+    //   d3.csv("carbon_budget.csv",function(error, data) {
+    //   if (error) {console.log(error);}
+    //   data= data.filter(function(row) {
+    //         return row['Year'] == '2011' || row['Year'] == '2015'|| row['Year'] == '2020'|| row['Year'] == '2025'|| row['Year'] == '2030'|| row['Year'] == '2035'|| row['Year'] == '2040'|| row['Year'] == '2045';
+    //     })
+    //   years = data;
+    //   emissions = years.map(function (year) {
+    //     // Create shorter variable names
+    //     return {
+    //       x: Number(year["Year"]),
+    //       y: Number(year["CUMULATIVE_EMISSIONS"]),
+    //     };
+    //   })
+    //     .filter(function (emission) {
+    //       return ! isNaN(emission.x) && ! isNaN(emission.y);
+    //     });
+    //   plotBudget(data);
+    // });
+  }
+}
 
   /**
    * UPDATE FUNCTIONS

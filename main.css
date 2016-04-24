@@ -38,7 +38,7 @@
   height: 300px;
 }
 
-#vis {
+#vis, #vis2 {
   display: inline-block;
   position: fixed;
   top: 60px;
@@ -97,7 +97,7 @@
 }
 
 .smoke {
-   -webkit-animation: smoking 20s infinite;
+  -webkit-animation: smoking 3s infinite;
 }
 
 @-webkit-keyframes smoking {
@@ -107,6 +107,40 @@
   }
   100% {
     opacity: 0.0;
-    transform: translate(0, -120px) scale(1);
+    transform: translate(0, -420px) scale(1);
   }
 }
+
+
+/* Yuqing styles */
+.d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+  }
+  path {
+    stroke: steelblue;
+    stroke-width: 3;
+    fill: none;
+  }
+  .axis path, 
+  .axis line {
+    fill: none;
+    stroke: #666;
+    shape-rendering: crispEdges;
+  }
+  .datapoint{fill: black;}
+  .datapoint:hover{
+fill:grey; opacity: 2; r: 20; }
+  
+  .xlabel, .ylabel {
+    font-weight:bold;
+    font-size:15px;
+  }
+  .graphtitle{
+    font-weight:bold;
+    font-size:20px;
+  }
