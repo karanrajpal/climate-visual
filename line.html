@@ -4,8 +4,7 @@
  
 body { font: 12px Arial;}
  
-path { 
-
+path {
   fill: none;
 }
  
@@ -31,22 +30,14 @@ path {
 <script src="http://d3js.org/d3.v3.min.js"></script>
  
 <script>
- 
-// Set the dimensions of the canvas / graph
-var	margin = {top: 30, right: 100, bottom: 100, left: 80},
-	width = 800 - margin.left - margin.right,
-	height = 400 - margin.top - margin.bottom;
-var sector = ["Electricity", "Manufacturing","Transportation", "Other Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use Change and Forestry", "Bunker Fuels"]
+var SECTION_1_SHOWING = false;
+var	lineSvg;
 
-var svg_showing = false;
-var	svg;
-var gy;
- 
-// Set the ranges
-function line(year){
-	var	margin = {top: 30, right: 100, bottom: 100, left: 80},
-		width = 800 - margin.left - margin.right,
-		height = 400 - margin.top - margin.bottom;
+function setupLine(year) {
+	var gy;
+	var	margins = {top: 30, right: 100, bottom: 100, left: 80},
+		width = 800 - margins.left - margins.right,
+		height = 400 - margins.top - margins.bottom;
 
 	var sector = ["Electricity", "Manufacturing","Transportation", "Other Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use Change and Forestry", "Bunker Fuels"]
 
@@ -71,17 +62,15 @@ function line(year){
 	var	valueline = d3.svg.line()
 		.x(function(d) { return x(d.sector); })
 		.y(function(d) { return y(d.amount); });
-	    
-	// Adds the svg canvas
-	if(svg_showing == false){
-		svg = d3.select("body")
-		.append("svg")
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", height + margin.top + margin.bottom)
-		.append("g")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-	 
-	// Get the data
+
+	lineSvg = d3.select("body")
+	.append("svg")
+		.attr("width", width + margins.left + margins.right)
+		.attr("height", height + margins.top + margins.bottom)
+	.append("g")
+		.attr("transform", "translate(" + margins.left + "," + margins.top + ")");
+
+		// Get the data
 	d3.csv("line_data.csv", function(error, data) {
 	  	if(error){
 			console.log( error ) ;
@@ -102,31 +91,10 @@ function line(year){
         .key(function(d) {return d.year;})
         .entries(data);
 	 
-		// Add the valueline path.
-		// var opacity=[];
-		// var color=[];
-		// var stroke=[];
-		// for(i= 1990; i<2013;i++){
-		// 	if (i < year) {
-		// 		opacity.push(0.5);
-		// 		color.push("#BCBABE");
-		// 		stroke.push(1);
-		// 	};
-		// 	if (i == year) {
-		// 		opacity.push(1);
-		// 		color.push("#375E97");
-		// 		stroke.push(3);
-		// 	}
-		// 	if(i > year) {
-		// 		opacity.push(0);
-		// 		color.push("#375E97");
-		// 		stroke.push(2);
-		// 	}
-		// }
 		var count = -1;
 		dataNest.forEach(function(d) {
 			count++;
-	        svg.append("path")
+	        lineSvg.append("path")
 	        	.attr("class","line2")
 	            .attr("id", id[count])
 	            .attr("d", valueline(d.values))
@@ -134,45 +102,38 @@ function line(year){
 	            .attr("stroke", "grey")
 
 	            .on("mouseover", function () {
-    				var hahaha = d3.select(this).attr("id");
+					var lineId = d3.select(this).attr("id");
 
-    				if(hahaha<year){
-    					console.log(hahaha);
-
-    					d3.select(this)
-    				.attr("stroke-width", 2)
-    				.attr("opacity", 1)
-    				.attr("stroke", "#90AFC5");
-    				}
-    				console.log(hahaha);
-    				// .attr("stroke-width", 2)
-    				// .attr("opacity", 1)
-    				// .attr("stroke", "#336B87");
+					if(lineId<year){
+						d3.select(this)
+						.attr("stroke-width", 2)
+						.attr("opacity", 1)
+						.attr("stroke", "#90AFC5");
+					}
 				})
 				.on("mouseout", function () {
-					var hahaha = d3.select(this).attr("id");
+					var lineId = d3.select(this).attr("id");
 
-    				if(hahaha<year){
-    					d3.select(this)
-    				.attr("opacity", 0.3)
-    				.attr("stroke", "grey")
-    				.attr("stroke-width", 1);
-    				}
-    				
+					if(lineId<year){
+						d3.select(this)
+						.attr("opacity", 0.3)
+						.attr("stroke", "grey")
+						.attr("stroke-width", 1);
+					}
 				});
-    	});
+		});
 
-    	for(var i=1990;i<year+1;i++){
-    		document.getElementById(i).setAttribute("opacity","0.3");
-    		document.getElementById(i).setAttribute("stroke-width",1);
-    	}
+		for(var i=1990;i<year+1;i++){
+			document.getElementById(i).setAttribute("opacity","0.3");
+			document.getElementById(i).setAttribute("stroke-width",1);
+		}
 
-    	document.getElementById(year).setAttribute("stroke","#336B87");
-    	document.getElementById(year).setAttribute("opacity","1");
-    	document.getElementById(year).setAttribute("stroke-width",2);
+		document.getElementById(year).setAttribute("stroke","#336B87");
+		document.getElementById(year).setAttribute("opacity","1");
+		document.getElementById(year).setAttribute("stroke-width",2);
 	 
 		// Add the X Axis
-		svg.append("g")		
+		lineSvg.append("g")		
 			.attr("class", "x axis")
 			.attr("transform", "translate(0," + height + ")")
 			.call(xAxis)
@@ -184,7 +145,7 @@ function line(year){
 		  	.style("text-anchor", "start");	
 	 
 		// Add the Y Axis
-		gy = svg.append("g")		
+		gy = lineSvg.append("g")		
 			.attr("class", "y axis")
 			.call(yAxis);
 
@@ -195,93 +156,32 @@ function line(year){
 		    .attr("x", -40)
 		    .attr("dy", -4);
 	});
-
-		svg_showing= true;
 }
-else{
-	svg.selectAll("line2")
+ 
+
+function line(year){
+	// Adds the svg canvas
+	if(SECTION_1_SHOWING == false) {
+		setupLine(year);
+	}
+	else{
+		lineSvg.selectAll("line2")
 		.attr("opacity","0");
 
 		for(var i=1990;i<year+1;i++){
-    		document.getElementById(i).setAttribute("opacity","0.3");
-    		document.getElementById(i).setAttribute("stroke","grey");
-    		document.getElementById(i).setAttribute("stroke-width",1);
+			var elm = document.getElementById(i);
+    		elm.setAttribute("opacity","0.3");
+    		elm.setAttribute("stroke","grey");
+    		elm.setAttribute("stroke-width",1);
     	}
-
-    	document.getElementById(year).setAttribute("stroke","#336B87");
-    	document.getElementById(year).setAttribute("opacity","1");
-    	document.getElementById(year).setAttribute("stroke-width",2);
-
-	//d3.selectAll("path.line").remove();
-	// d3.csv("line_data.csv", function(error, data) {
-	//   	if(error){
-	// 		console.log( error ) ;
-	// 	}
-
-	// 	data.forEach(function(d) {
-	// 		d.year = +d.year;
-	// 		d.sector = +d.sector;
-	// 		d.amount = +d.amount;
-			
-	// 	});
-	 
-	// 	// Scale the range of the data
-	// 	x.domain([d3.min(data, function(d) { return d.sector; }), d3.max(data, function(d) { return d.sector; })]);
-	// 	y.domain([0, d3.max(data, function(d) { return d.amount; })]);
-
-	// 	var dataNest = d3.nest()
- //        .key(function(d) {return d.year;})
- //        .entries(data);
-	 
-	// 	// Add the valueline path.
-	// 	var opacity=[];
-	// 	var color=[];
-	// 	var stroke=[];
-	// 	for(i= 1990; i<2013;i++){
-	// 		if (i < year) {
-	// 			opacity.push(0.5);
-	// 			color.push("#BCBABE");
-	// 			stroke.push(1);
-	// 		};
-	// 		if (i == year) {
-	// 			opacity.push(1);
-	// 			color.push("#375E97");
-	// 			stroke.push(3);
-	// 		}
-	// 		if(i > year) {
-	// 			opacity.push(0);
-	// 			color.push("#375E97");
-	// 			stroke.push(3);
-	// 		}
-	// 	}
-
-	// 	console.log(opacity);
-	// 	console.log(dataNest);
-	// 	console.log(color);
-	// 	var i = 0;
-	// 	dataNest.forEach(function(d) {
-	//         svg.append("path")
-	//             .attr("class", "line")
-	//             .attr("d", valueline(d.values))
-	//             .attr("opacity", opacity[i])
-	//             .attr("stroke",color[i])
-	//             .attr("stroke-width",stroke[i]);
-
-	//             i++; 
- //    	});
-
- //   });
+    	elm2 = document.getElementById(year);
+    	elm2.setAttribute("stroke","#336B87");
+    	elm2.setAttribute("opacity","1");
+    	elm2.setAttribute("stroke-width",2);
+	}
 }
 
-	 
-}
-
- line(2012);
-// var i = 1990;
-// 	setInterval(function() {
-// 	line(i);
-// 	i++;
-// },500);
+line(2012);
 
  
 </script>

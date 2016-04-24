@@ -49,6 +49,13 @@
   /* background-color: #ddd; */
 }
 
+#vis1 {
+  position: fixed;
+  top: 0px;
+  margin-left: 50%;
+  -webkit-transform: translate(-50%);
+}
+
 #vis .title {
   font-size:120px;
   text-anchor: middle;
@@ -122,17 +129,11 @@
     color: #fff;
     border-radius: 2px;
   }
-  path {
+  /*path {
     stroke: steelblue;
     stroke-width: 3;
     fill: none;
-  }
-  .axis path, 
-  .axis line {
-    fill: none;
-    stroke: #666;
-    shape-rendering: crispEdges;
-  }
+  }*/
   .datapoint{fill: black;}
   .datapoint:hover{
 fill:grey; opacity: 2; r: 20; }
@@ -153,4 +154,26 @@ fill:grey; opacity: 2; r: 20; }
   background-color: black;
   padding: 20px;
   color: white;
+  display: none;
+}
+
+
+/* Jiaming styles */
+path {
+  fill: none;
+}
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.y.axis path{
+  display: none; 
+}
+.axis .minor line {
+  stroke: #777;
+  stroke-dasharray: 2,2;
 }
