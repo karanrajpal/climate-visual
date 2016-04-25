@@ -10,7 +10,7 @@ var scrollVis = function() {
   // and margins of the vis area.
   var width = 900;
   var height = 520;
-  var margin = {top:0, left:40, bottom:100, right:40};
+  var margin = {top:50, left:40, bottom:100, right:40};
 
   // Keep track of which visualization
   // we are on and which was the last
@@ -339,10 +339,10 @@ var scrollVis = function() {
   function setupLine(year) {
   var gy;
   var margins = {top: 30, right: 100, bottom: 100, left: 80},
-    width = 800 - margins.left - margins.right,
-    height = 400 - margins.top - margins.bottom;
+    width = 1000 - margins.left - margins.right,
+    height = 300 - margins.top - margins.bottom;
 
-  var sector = ["Electricity", "Manufacturing","Transportation", "Other Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use Change and Forestry", "Bunker Fuels"]
+  var sector = ["Electricity", "Manufacturing","Transportation", "Other Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use and Forestry", "Bunker Fuels"]
 
   var id = [1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012]
 
@@ -468,7 +468,6 @@ function line(){
   var year = activeIndex*2 + 1990;
   // Adds the svg canvas
   if(SECTION_LINE_SHOWING == false) {
-    // debugger;
     setupLine(year);
     console.log("SETTING UP");
     SECTION_LINE_SHOWING = true;

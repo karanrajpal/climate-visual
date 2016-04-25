@@ -52,7 +52,7 @@
 #vis1 {
   position: fixed;
   top: 0px;
-  margin-left: 50%;
+  margin-left: 55%;
   z-index: 2000000;
   -webkit-transform: translate(-50%);
 }
