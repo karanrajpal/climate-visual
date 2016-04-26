@@ -343,7 +343,6 @@ var scrollVis = function() {
     height = 300 - margins.top - margins.bottom;
 
   var sector = ["Electricity", "Manufacturing","Transportation", "Other Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use and Forestry", "Bunker Fuels"]
-
   var id = [1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012]
 
   var x = d3.scale.linear().range([0, width]);
@@ -393,6 +392,8 @@ var scrollVis = function() {
     var dataNest = d3.nest()
         .key(function(d) {return d.year;})
         .entries(data);
+
+        console.log(dataNest);
    
     var count = -1;
     dataNest.forEach(function(d) {
@@ -402,33 +403,14 @@ var scrollVis = function() {
               .attr("id", id[count])
               .attr("d", valueline(d.values))
               .attr("opacity", 0)
-              .attr("stroke", "grey")
-
-              .on("mouseover", function () {
-          var lineId = d3.select(this).attr("id");
-
-          if(lineId<year){
-            d3.select(this)
-            .attr("stroke-width", 2)
-            .attr("opacity", 1)
-            .attr("stroke", "#90AFC5");
-          }
-        })
-        .on("mouseout", function () {
-          var lineId = d3.select(this).attr("id");
-
-          if(lineId<year){
-            d3.select(this)
-            .attr("opacity", 0.3)
-            .attr("stroke", "grey")
-            .attr("stroke-width", 1);
-          }
-        });
+              .attr("stroke", "grey");
     });
 
-    for(var i=1990;i<year+1;i++){
+    for(var i=1990;i<year;i=i+2){
       document.getElementById(i).setAttribute("opacity","0.3");
       document.getElementById(i).setAttribute("stroke-width",1);
+      document.getElementById(i).addEventListener('mouseover', on, false);
+      document.getElementById(i).addEventListener('mouseout', out, false);
     }
 
     document.getElementById(year).setAttribute("stroke","#336B87");
@@ -456,36 +438,79 @@ var scrollVis = function() {
         .classed("minor", true);
 
     gy.selectAll("text")
-        .attr("x", -40)
-        .attr("dy", -4);
+        .attr("x", -48)
+        .attr("dy", 5);
       FILE_LOADED = true;
   });
 }
 
 var FILE_LOADED = false;
 
+var on = function (event) {
+        d3.select(this)
+        .attr("stroke","#66A5AD")
+        .attr("stroke-width",2)
+        .attr("opacity",1);
+
+        var year = d3.select(this).attr("id");
+
+        console.log(year);
+
+        lineSvg.append("text")
+        .attr("id", year*2)
+        .attr("x", 80)
+        .attr("dy", 150)
+        .attr("fill","#66A5AD")
+        .text(year);
+        };
+
+var out = function (event) {
+        d3.select(this)
+        .attr("stroke","grey")
+        .attr("stroke-width",1)
+        .attr("opacity",0.3);
+
+        var year = d3.select(this).attr("id") *2;
+        console.log(year);
+
+        document.getElementById(year).remove();
+
+
+        };
+
 function line(){
   var year = activeIndex*2 + 1990;
   // Adds the svg canvas
   if(SECTION_LINE_SHOWING == false) {
     setupLine(year);
-    console.log("SETTING UP");
+    console.log("FIRST FUNCTION");
     SECTION_LINE_SHOWING = true;
   }
   else if(FILE_LOADED==true){
+    console.log("SECOND FUNCTION");
+    //Here I wwant to remove old attribute.
+    for(var m= 1990;m<2013;m++){
+      document.getElementById(m).removeEventListener('mouseover',on,false);
+      document.getElementById(m).removeEventListener('mouseout',out,false);
+    }
     lineSvg.selectAll(".line2")
     .attr("opacity","0");
+    
 
-    for(var i=1990;i<year+1;i++){
+    for(var i=1990;i<year;i=i+2){
       var elm = document.getElementById(i);
         elm.setAttribute("opacity","0.3");
         elm.setAttribute("stroke","grey");
         elm.setAttribute("stroke-width",1);
+        elm.addEventListener('mouseover', on, false);
+        elm.addEventListener('mouseout', out, false);
+
       }
+
       elm2 = document.getElementById(year);
       elm2.setAttribute("stroke","#336B87");
       elm2.setAttribute("opacity","1");
-      elm2.setAttribute("stroke-width",2);
+      elm2.setAttribute("stroke-width",2 );
   }
 }
 
