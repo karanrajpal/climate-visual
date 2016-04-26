@@ -102,7 +102,11 @@
 }
 .country-text {
   writing-mode: tb;
-  -webkit-transition: all 0.5s;
+  /*-webkit-transition: all 0.5s;*/
+  font-size: 12px;
+  /*transform: rotate3d(30,20,40);*/
+  /*transform-origin: left top 0;*/
+ /*transform="rotate(30 20,40)*/
 }
 
 .smoke {
@@ -116,7 +120,7 @@
   }
   100% {
     opacity: 0.0;
-    transform: translate(0, -420px) scale(1);
+    transform: translate(0, -220px) scale(1);
   }
 }
 
@@ -177,4 +181,30 @@ path {
 .axis .minor line {
   stroke: #777;
   stroke-dasharray: 2,2;
+}
+
+.Europe {
+  fill: red;
+}
+.America {
+  fill: orange;
+  /*fill: orange;
+  color: orange;
+  background: orange;
+  stroke: aqua;*/
+}
+.Asia {
+  fill: blue;
+}
+.Africa {
+  fill: lightyellow;
+}
+.Antarctica {
+  fill: aquamarine;
+}
+.SouthAmerica {
+  fill: green;
+}
+.Australia {
+  fill: pink;
 }
