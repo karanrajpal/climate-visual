@@ -136,7 +136,7 @@ var scrollVis = function() {
   setupSections = function() {
     // activateFunctions are called each
     // time the active section changes
-    activateFunctions[i] = showOverview;
+    activateFunctions[0] = showOverview;
     for(var i = 1; i < 13; i++) {
       activateFunctions[i] = function() {
         line();
