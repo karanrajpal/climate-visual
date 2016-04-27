@@ -159,10 +159,9 @@ var scrollVis = function() {
     // Most sections do not need to be updated
     // for all scrolling and so are set to
     // no-op functions.
-    for(var i = 0; i < 22; i++) {
+    for(var i = 0; i < 40; i++) {
       updateFunctions[i] = function() {};
     }
-      updateFunctions[7] = function() {};
   };
 
   /**
@@ -194,12 +193,13 @@ var scrollVis = function() {
   var CURRENT_YEAR = 1990;
 
   function showCountryEmissions() {
-    var year = (activeIndex-1)*2+1990;
+    var year = CURRENT_YEAR;
     if(year>2012) {
       return;
     }
     var counter = -1;
     var newData = co2Data[(activeIndex-1)*2].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
+    // var newData = co2Data[(activeIndex-1)*2].values.sort( function(a,b) { return parseInt(b.continent) - parseInt(a.continent); } ).slice(1,11);
     var newRank = [];
     var newCo2 = [];
     newData.forEach(function(d) {
@@ -545,7 +545,7 @@ var out = function (event) {
         };
 
 function line(){
-  var year = (activeIndex-1)*2 + 1990;
+  var year = CURRENT_YEAR;
   if(year>2012) { return; }
   // Adds the svg canvas
   if(SECTION_LINE_SHOWING == false) {
@@ -643,6 +643,11 @@ function line(){
     // Call updateThermometer
     // Call setupWorldIcon
     // Call setupWorldSmoke
+    if(document.getElementById('thermoSVG1') == null) {
+      setupThermometer(1);
+    }
+    updateThermometerHeight(1);
+    updateThermometerWidth();
   }
 
   var recSvg;
@@ -710,8 +715,7 @@ function line(){
     //var height = document.getElementById('thermometer1').clientHeight,
     var padding = 20;
 
-
-    var year = (activeIndex-1)*2+1990;
+    var year = CURRENT_YEAR;
     if(year<=2012) {
       height=200;
       domain_max = 100;
@@ -732,6 +736,7 @@ function line(){
       }
 
       if(parentNum == 1){
+        if(year=="") { year = 1990; }
         var rect_height = data[year-1990].situation1;
         //console.log("Setting height as "+yScale(rect_height)/height);
         // var transition = svg.transition().duration(750);
@@ -745,6 +750,7 @@ function line(){
         document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
         }
       else{
+        if(year=="") { year = 1990; }
         var rect_height = data[year-1990].situation2;
         //console.log("Setting height as "+yScale(rect_height)/height);
         // var transition = svg.transition().duration(750);
@@ -764,14 +770,17 @@ function line(){
   function updateThermometerWidth(parentNum) {
     // Find the thermometer element with that id. Set the width of the inner bar and animate it.
     // var year = (activeIndex-1)*2+1990;
-    var year = (activeIndex-1)*2+1990;
+    var year = CURRENT_YEAR;
     console.log(year);
-    if(year<=2012) {
+    if(year>=1990 && year<=2012) {
       document.getElementById('thermometer1').className = '';
       document.getElementById('thermometer2').className = '';
-    } else {
+    } else if(year>2012) {
       document.getElementById('thermometer1').className = 'tleft';
       document.getElementById('thermometer2').className = 'tright';
+    } else {
+      document.getElementById('thermometer1').className = 'big';
+      document.getElementById('thermometer2').className = '';
     }
   }
 
@@ -804,12 +813,13 @@ function line(){
    */
   chart.activate = function(index) {
     activeIndex = index;
+    CURRENT_YEAR = yearsArr[activeIndex];
     var sign = (activeIndex - lastIndex) < 0 ? -1 : 1;
     var scrolledSections = d3.range(lastIndex + sign, activeIndex + sign, sign);
     scrolledSections.forEach(function(i) {
       activateFunctions[i]();
       console.log("ActiveIndex "+activeIndex);
-      // CURRENT_YEAR = years[activeIndex+1];
+      console.log("CURRENT YEAR"+CURRENT_YEAR);
     });
     lastIndex = activeIndex;
   };
@@ -828,11 +838,14 @@ function line(){
   return chart;
 };
 
+var yearsArr = [];
+
 
 function setupSteps(data) {
   var parent = document.getElementById("sections");
   var buffer = '';
   data.forEach(function(d) {
+    yearsArr.push(d.year);
     var step = '<div id="sections">\
     <section class="step">\
         <div class="title">'+d.year+'</div>\
