@@ -648,15 +648,16 @@ function line(){
   var recSvg;
   function setupThermometer(parentNum) {
     // Create the svg and append it to the parent id with the width set to 100%;
-    recSvg = d3.select("#thermometer"+parentNum)
-      .append("svg")
-      .attr("id", "thermoSVG"+parentNum)
-      .attr({
-        "width": '100%',
-        "height": '100%'
-        })
-      .append("g");
-      // .attr("transform","");
+
+      recSvg = d3.select("#thermometer"+parentNum)
+        .append("svg")
+        .attr("id", "thermoSVG"+parentNum)
+        .attr({
+          "width": '100%',
+          "height": '100%'
+          })
+        .append("g");
+        // .attr("transform","");
 
 
       recSvg.append("rect")
@@ -679,10 +680,10 @@ function line(){
 
       recSvg.append("text")
           .attr("id", "text_rect"+parentNum)
-          .attr("x",10)
-          .attr("y",10)
+          .attr("x",5)
+          .attr("y",5)
           .attr("fill","#505160")
-          .text("hahahaha");
+          .text("can you see me hahaha");
 
       RECT_LOADED = true;
 
