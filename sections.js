@@ -199,6 +199,7 @@ var scrollVis = function() {
     }
     var counter = -1;
     var newData = co2Data[(activeIndex-1)*2].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
+    // var newData = co2Data[(activeIndex-1)*2].values.sort( function(a,b) { return parseInt(b.continent) - parseInt(a.continent); } ).slice(1,11);
     var newRank = [];
     var newCo2 = [];
     newData.forEach(function(d) {
@@ -642,6 +643,11 @@ function line(){
     // Call updateThermometer
     // Call setupWorldIcon
     // Call setupWorldSmoke
+    if(document.getElementById('thermoSVG1') == null) {
+      setupThermometer(1);
+    }
+    updateThermometerHeight(1);
+    updateThermometerWidth();
   }
 
   var recSvg;
@@ -708,7 +714,6 @@ function line(){
     //var height = document.getElementById('thermometer1').clientHeight,
     var padding = 20;
 
-
     var year = CURRENT_YEAR;
     if(year<=2012) {
       height=200;
@@ -727,7 +732,8 @@ function line(){
       console.log( error ) ;
       }
 
-      if(parentNum == 1 && year>2012 ){
+      if(parentNum == 1 && year>2012 ) {
+        if(year=="") { year = 1990; }
         var rect_height = data[year-1990].situation1;
         //console.log("Setting height as "+yScale(rect_height)/height);
         // var transition = svg.transition().duration(750);
@@ -740,6 +746,7 @@ function line(){
         document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
       }
       else{
+        if(year=="") { year = 1990; }
         var rect_height = data[year-1990].situation2;
         //console.log("Setting height as "+yScale(rect_height)/height);
         // var transition = svg.transition().duration(750);
@@ -760,12 +767,15 @@ function line(){
     // var year = (activeIndex-1)*2+1990;
     var year = CURRENT_YEAR;
     console.log(year);
-    if(year<=2012) {
+    if(year>=1990 && year<=2012) {
       document.getElementById('thermometer1').className = '';
       document.getElementById('thermometer2').className = '';
-    } else {
+    } else if(year>2012) {
       document.getElementById('thermometer1').className = 'tleft';
       document.getElementById('thermometer2').className = 'tright';
+    } else {
+      document.getElementById('thermometer1').className = 'big';
+      document.getElementById('thermometer2').className = '';
     }
   }
 

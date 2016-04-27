@@ -224,6 +224,12 @@ path {
   width: 300px !important;
   height: 300px !important;
 }
+.big {
+  right: 300px !important;
+  top: 100px !important;
+  width: 600px !important;
+  height: 450px !important;
+}
 #thermometer2 {
   position: fixed;
   right: 10px;
