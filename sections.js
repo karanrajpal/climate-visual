@@ -142,6 +142,7 @@ var scrollVis = function() {
         line();
         showCountryEmissions();
         handleThermometer(1);
+        handleThermometer(2);
       }
     }
     for(var i = 13; i < 28; i++) {
@@ -212,7 +213,7 @@ var scrollVis = function() {
       document.getElementById('vis2').style.display = 'none';
       document.getElementById('vis').style.display = 'inline-block';
       document.getElementById('vis1').style.display = 'block';
-      document.getElementById('thermometer2').style.display = 'none';
+      document.getElementById('thermometer1').style.display = 'block';
     }
     if(!SECTION_1_SHOWING) {
       newData.forEach(function(d) {
@@ -398,7 +399,7 @@ var scrollVis = function() {
   function setupLine(year) {
     var gy;
     var margins = {top: 30, right: 100, bottom: 100, left: 80},
-      width = 1000 - margins.left - margins.right,
+      width = 900 - margins.left - margins.right,
       height = 300 - margins.top - margins.bottom;
 
     var sector = ["Electricity", "Manufacturing","Transportation", "Other Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use and Forestry", "Bunker Fuels"]
@@ -723,7 +724,7 @@ function line(){
       console.log( error ) ;
       }
 
-      if(parentNum == 1){
+      if(parentNum == 1 && year>2012 ){
         var rect_height = data[year-1990].situation1;
         //console.log("Setting height as "+yScale(rect_height)/height);
         document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
@@ -750,6 +751,7 @@ function line(){
     console.log(year);
     if(year<=2012) {
       document.getElementById('thermometer1').className = '';
+      document.getElementById('thermometer2').className = '';
     } else {
       document.getElementById('thermometer1').className = 'tleft';
       document.getElementById('thermometer2').className = 'tright';
