@@ -688,7 +688,8 @@ function line(){
           .attr("x",5)
           .attr("y",-5)
           .attr("fill","#505160")
-          .text("can you see me hahaha");
+          .text("can you see me hahaha")
+          .attr("font-size",70);
 
       RECT_LOADED = true;
 
@@ -721,14 +722,14 @@ function line(){
       domain_max = 100;
     } else {
       height = 300;
-      domain_max = 630;
+      domain_max = 650;
     }
     // console.log(height);
     var yScale = d3.scale.linear()
         .domain([0,domain_max])
         .range([height - padding, padding]);
     var color_scale = d3.scale.linear()
-        .domain([0, 100]).range(['black', "#FF0303"]);
+        .domain([0, 100, 600]).range(['black', "#BC1717", "#FF2424"]);
 
     d3.csv("data/carbon_budget.csv", function(error, data) {
       if(error){
@@ -737,18 +738,36 @@ function line(){
 
       if(parentNum == 1){
         if(year=="") { year = 1990; }
-        var rect_height = data[year-1990].situation1;
-        //console.log("Setting height as "+yScale(rect_height)/height);
-        // var transition = svg.transition().duration(750);
-          // delay = function(d, i) { return i * 30; };
-        // transition.selectAll('.innerRECT'+parentNum)
-        //   .attr('height', function(d,i) { var elt = d3.select(this); debugger; return yScale(rect_height); })
-        document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
-        document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
-        document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
-        document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
-        document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
+        if (year>2012) {
+          var rect_height = data[year-1990].situation1;
+          //console.log("Setting height as "+yScale(rect_height)/height);
+          // var transition = svg.transition().duration(750);
+            // delay = function(d, i) { return i * 30; };
+          // transition.selectAll('.innerRECT'+parentNum)
+          //   .attr('height', function(d,i) { var elt = d3.select(this); debugger; return yScale(rect_height); })
+          document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
+          document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
+          document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
+          document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
+          document.getElementById('text_rect'+parentNum).setAttribute("font-size", 38);
+          document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
+
         }
+        else{
+          var rect_height = data[year-1990].situation1;
+          //console.log("Setting height as "+yScale(rect_height)/height);
+          // var transition = svg.transition().duration(750);
+            // delay = function(d, i) { return i * 30; };
+          // transition.selectAll('.innerRECT'+parentNum)
+          //   .attr('height', function(d,i) { var elt = d3.select(this); debugger; return yScale(rect_height); })
+          document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
+          document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
+          document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
+          document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
+          document.getElementById('text_rect'+parentNum).setAttribute("font-size", 14);
+          document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";  
+        }
+      }
       else{
         if(year=="") { year = 1990; }
         var rect_height = data[year-1990].situation2;
@@ -761,6 +780,7 @@ function line(){
         document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
         document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
         document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
+        document.getElementById('text_rect'+parentNum).setAttribute("font-size", 38);
         document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
         }
     });
