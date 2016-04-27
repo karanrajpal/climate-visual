@@ -211,17 +211,16 @@ path {
 
 #thermometer1 {
   position: fixed;
-  right: 10px;
+  right: 50px;
   top: 50px;
   width: 50px;
   height: 200px;
-<<<<<<< HEAD
   -webkit-transition: all 0.6s;
 }
 .tleft {
-  right: 120px !important;
-  top: 100px !important;
-  width: 400px !important;
+  right: 100px !important;
+  top: 60px !important;
+  width: 300px !important;
   height: 300px !important;
 }
 #thermometer2 {
@@ -230,12 +229,13 @@ path {
   top: 50px;
   width: 50px;
   height: 200px;
+  opacity: 0;
   -webkit-transition: all 0.6s;
 }
 .tright {
-  right: 60px !important;
+  right: 600px !important;
   top: 60px !important;
-  width: 400px !important;
+  width: 300px !important;
   height: 300px !important;
-
+  opacity: 1 !important;
 }
