@@ -141,7 +141,7 @@ var scrollVis = function() {
       activateFunctions[i] = function() {
         line();
         showCountryEmissions();
-        handleThermometer(2);
+        handleThermometer(1);
       }
     }
     for(var i = 13; i < 28; i++) {
@@ -161,7 +161,7 @@ var scrollVis = function() {
     for(var i = 0; i < 22; i++) {
       updateFunctions[i] = function() {};
     }
-    updateFunctions[7] = function() {};
+      updateFunctions[7] = function() {};
   };
 
   /**
@@ -212,6 +212,7 @@ var scrollVis = function() {
       document.getElementById('vis2').style.display = 'none';
       document.getElementById('vis').style.display = 'inline-block';
       document.getElementById('vis1').style.display = 'block';
+      document.getElementById('thermometer2').style.display = 'none';
     }
     if(!SECTION_1_SHOWING) {
       newData.forEach(function(d) {
@@ -620,6 +621,8 @@ function line(){
     document.getElementById('vis').style.display = 'none';
     document.getElementById('vis1').style.display = 'none';
     document.getElementById('vis2').style.display = 'inline-block';
+    document.getElementById('thermometer2').style.display = 'block';
+
     if(!SECTION_2_SHOWING) {
         SECTION_2_SHOWING = true;
         // Read in .csv data and make graph
@@ -640,6 +643,7 @@ function line(){
     // Create the svg and append it to the parent id with the width set to 100%;
     recSvg = d3.select("#thermometer"+parentNum)
       .append("svg")
+      .attr("id", "thermoSVG"+parentNum)
       .attr({
         "width": '100%',
         "height": '100%'
@@ -649,39 +653,44 @@ function line(){
 
 
       recSvg.append("rect")
-        .attr("id","outerRECT"+parentNum)
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("height",'100%')
-        .attr("width",'100%')
-        .attr("fill","red")
-        .attr("stroke-width",2)
-        .attr("stroke","black");
+          .attr("id","outerRECT"+parentNum)
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("height",'100%')
+          .attr("width",'100%')
+          .attr("fill","#CB0000");
+        // .attr("stroke-width",2)
+        // .attr("stroke","black");
 
       recSvg.append("rect")
-        .attr("id","innerRECT"+parentNum)
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("height",'100%')
-        .attr("width",'100%')
-        .attr("fill","white")
-    .attr("stroke-width",2)
-        .attr("stroke","black");
+            .attr("id","innerRECT"+parentNum)
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("height",'100%')
+            .attr("width",'100%')
+            .attr("fill","#F1F1F2");
+
+      recSvg.append("text")
+          .attr("id", "text_rect"+parentNum)
+          .attr("x",10)
+          .attr("y",10)
+          .attr("fill","#505160")
+          .text("hahahaha");
 
       RECT_LOADED = true;
 
   }
 
-  var SECTION_RECT_SHOWING = false;
+  //var SECTION_RECT_SHOWING = false;
   var RECT_LOADED = false;
   function handleThermometer(parentNum) {
     // If thermometer exists, call updateThermometer to set the height.
     // If thermometer does not exist, create it by calling setupThermometer and then call updateThermometer to set the height
     // Call updateThermometerWidth to set the width to the small size
 
-    if(SECTION_RECT_SHOWING == false) {
+    if(document.getElementById('thermoSVG'+parentNum) == null) {
       setupThermometer(parentNum);
-      SECTION_RECT_SHOWING = true;
+      //SECTION_RECT_SHOWING = true;
     }
     else {
       updateThermometerWidth(parentNum);
@@ -699,12 +708,14 @@ function line(){
     var year = (activeIndex-1)*2+1990;
     if(year<=2012) {
       height=200;
+      domain_max = 100;
     } else {
       height = 300;
+      domain_max = 630;
     }
     // console.log(height);
     var yScale = d3.scale.linear()
-        .domain([0,630])
+        .domain([0,domain_max])
         .range([height - padding, padding]);
 
     d3.csv("data/carbon_budget.csv", function(error, data) {
@@ -712,9 +723,22 @@ function line(){
       console.log( error ) ;
       }
 
-      var rect_height = data[year-1990].situation1;
-      console.log("Setting height as "+yScale(rect_height)/height);
-      document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
+      if(parentNum == 1){
+        var rect_height = data[year-1990].situation1;
+        //console.log("Setting height as "+yScale(rect_height)/height);
+        document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
+        document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
+        document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
+        document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
+      }
+      else{
+        var rect_height = data[year-1990].situation2;
+        //console.log("Setting height as "+yScale(rect_height)/height);
+        document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height))
+        document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
+        document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
+        document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";;
+        }
     });
 
   }
