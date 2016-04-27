@@ -699,10 +699,8 @@ function line(){
       setupThermometer(parentNum);
       //SECTION_RECT_SHOWING = true;
     }
-    else {
       updateThermometerWidth(parentNum);
       updateThermometerHeight(parentNum);
-    }
   }
   //define the size of divs!!!!!!!!!!!!!!!
   function updateThermometerHeight(parentNum) {
@@ -733,6 +731,10 @@ function line(){
       if(parentNum == 1 && year>2012 ){
         var rect_height = data[year-1990].situation1;
         //console.log("Setting height as "+yScale(rect_height)/height);
+        // var transition = svg.transition().duration(750);
+          // delay = function(d, i) { return i * 30; };
+        // transition.selectAll('.innerRECT'+parentNum)
+        //   .attr('height', function(d,i) { var elt = d3.select(this); debugger; return yScale(rect_height); })
         document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
         document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
         document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
@@ -741,6 +743,10 @@ function line(){
       else{
         var rect_height = data[year-1990].situation2;
         //console.log("Setting height as "+yScale(rect_height)/height);
+        // var transition = svg.transition().duration(750);
+          // delay = function(d, i) { return i * 30; };
+        // transition.selectAll('.innerRECT'+parentNum)
+          // .attr('height', function(d,i) { var elt = d3.select(this); console.log(rect_height); return yScale(rect_height); })
         document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height))
         document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
         document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
