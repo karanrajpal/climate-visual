@@ -681,7 +681,7 @@ function line(){
       recSvg.append("text")
           .attr("id", "text_rect"+parentNum)
           .attr("x",5)
-          .attr("y",5)
+          .attr("y",-5)
           .attr("fill","#505160")
           .text("can you see me hahaha");
 
@@ -700,10 +700,8 @@ function line(){
       setupThermometer(parentNum);
       //SECTION_RECT_SHOWING = true;
     }
-    else {
       updateThermometerWidth(parentNum);
       updateThermometerHeight(parentNum);
-    }
   }
   //define the size of divs!!!!!!!!!!!!!!!
   function updateThermometerHeight(parentNum) {
@@ -725,27 +723,39 @@ function line(){
     var yScale = d3.scale.linear()
         .domain([0,domain_max])
         .range([height - padding, padding]);
+    var color_scale = d3.scale.linear()
+        .domain([0, 100]).range(['black', "#FF0303"]);
 
     d3.csv("data/carbon_budget.csv", function(error, data) {
       if(error){
       console.log( error ) ;
       }
 
-      if(parentNum == 1 && year>2012 ){
+      if(parentNum == 1){
         var rect_height = data[year-1990].situation1;
         //console.log("Setting height as "+yScale(rect_height)/height);
+        // var transition = svg.transition().duration(750);
+          // delay = function(d, i) { return i * 30; };
+        // transition.selectAll('.innerRECT'+parentNum)
+        //   .attr('height', function(d,i) { var elt = d3.select(this); debugger; return yScale(rect_height); })
         document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
+        document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
         document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
         document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
         document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
-      }
+        }
       else{
         var rect_height = data[year-1990].situation2;
         //console.log("Setting height as "+yScale(rect_height)/height);
-        document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height))
+        // var transition = svg.transition().duration(750);
+          // delay = function(d, i) { return i * 30; };
+        // transition.selectAll('.innerRECT'+parentNum)
+          // .attr('height', function(d,i) { var elt = d3.select(this); console.log(rect_height); return yScale(rect_height); })
+        document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
+        document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
         document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
         document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
-        document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";;
+        document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
         }
     });
 
