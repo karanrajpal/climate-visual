@@ -109,7 +109,7 @@
  /*transform="rotate(30 20,40)*/
 }
 
-.smoke {
+.smoke, .smokeduplicate {
   -webkit-animation: smoking 3s infinite;
 }
 
@@ -207,4 +207,13 @@ path {
 }
 .Australia {
   fill: pink;
+}
+
+
+#thermometer1 {
+  position: fixed;
+  right: 10px;
+  top: 50px;
+  width: 50px;
+  height: 200px;
 }

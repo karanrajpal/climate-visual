@@ -242,7 +242,7 @@ var scrollVis = function() {
           // insertRuleForHeight(d.co2,counter2);
           // for (var i = 0; i < co2Scale(d.co2)/10; i++) {
           for (var i = 0; i < 1; i++) {
-            var img = g.append("image")
+            g.append("image")
             .attr("xlink:href","img/smoke-"+d.continent+".png")
             .attr('x',function() { return xScale(counter2); })
             .attr('y',-co2Scale(d.co2)*0.5+420 )
@@ -251,49 +251,32 @@ var scrollVis = function() {
             .attr('rank',counter2)
             .attr('class','smoke smoke'+counter2)
             .attr('co2',co2Scale(d.co2))
-            .style('animation-delay',0.2*i+'s')
+            // .style('animation-delay',0.2*i+'s')
             // .style('animation-duration',30/co2Scale(d.co2)+'s');
+            // .style('animation-delay',0.2*i+'s')
           };
         });
+
+          // Creating a duplicate on the side for use later
+          // g.append("image")
+          // .attr("xlink:href","img/smoke-"+d.continent+".png")
+          // .attr('x',xScale(400)+10)
+          // .attr('y',-co2Scale(d.co2)*0.5+420 )
+          // .attr('width',co2Scale(100))
+          // .attr('height',co2Scale(100))
+          // .attr('rank',15)
+          // .attr('class','smokeduplicate')
+          // .attr('co2',co2Scale(100));
 
         SECTION_1_SHOWING = true;
     } else {
       if(!IS_SMOKE_SHOWING) {
-        // var counter2 = -1;
-        // newData.forEach(function(d) {
-        //   IS_SMOKE_SHOWING = true;
-        //   // console.log(d.co2 + " is "+ Math.floor(co2Scale(d.co2)));
-        //   counter2++;
-        //   // insertRuleForHeight(d.co2,counter2);
-        //   // for (var i = 0; i < co2Scale(d.co2)/10; i++) {
-        //   for (var i = 0; i < 1; i++) {
-        //     var img = g.append("image")
-        //     .attr("xlink:href","img/smoke-"+d.continent+".png")
-        //     .attr('x',function() { return xScale(counter2); })
-        //     .attr('y',-co2Scale(d.co2)*0.5+420 )
-        //     .attr('width',co2Scale(d.co2))
-        //     .attr('height',co2Scale(d.co2))
-        //     .attr('class','smoke smoke'+counter2)
-        //     .attr('co2',co2Scale(d.co2))
-        //     .style('animation-delay',0.2*i+'s')
-        //     // .style('animation-duration',30/co2Scale(d.co2)+'s');
-        //   };
-        // });
+        
       } else {
-        // newData.forEach(function(d,i) {
-        //   var data = d;
-        //   g.selectAll('.smoke'+i).each(function(d,j) {
-        //     var elt = d3.select(this);
-        //     elt.attr('width',co2Scale(data.co2))
-        //       .attr('height',co2Scale(data.co2))
-        //       .attr("xlink:href","img/smoke-"+data.continent+".png")
-        //       .attr('y',-co2Scale(data.co2)*0.5+420 );
-        //   });
-        // });
-
         var existingElements = g.selectAll('.country-text');
         var existingIcons = g.selectAll('.graph-icon');
         var existingSmoke = g.selectAll('.smoke');
+        // var duplicateSmoke = g.selectAll('.smokeduplicate');
         var oldRank = [];
         for (var i = 0; i < existingElements[0].length; i++) {
           oldRank.push(existingElements[0][i].textContent);
@@ -333,19 +316,27 @@ var scrollVis = function() {
             .attr('class','graph-icon');
 
 
-            g.append("image")
-            .attr("xlink:href","img/smoke-"+newData[i].continent+".png")
-            .attr('x',function() { return xScale(i); })
-            .attr('y',-co2Scale(newData[i].co2)*0.5+420 )
-            .attr('width',co2Scale(newData[i].co2))
-            .attr('height',co2Scale(newData[i].co2))
-            .attr('rank',i)
-            .attr('class','smoke smoke'+i)
-            .attr('co2',co2Scale(newData[i].co2))
-            .style('animation-delay',0.2*i+'s')
+            // Pick the first available duplicate smoke and repurpose it
+            // duplicateSmoke[0][0].setAttribute('width',co2Scale(newData[i].co2));
+            // duplicateSmoke[0][0].setAttribute('height',co2Scale(newData[i].co2))
+            // duplicateSmoke[0][0].setAttribute('y',-co2Scale(newData[i].co2)*0.5+420);
+            // duplicateSmoke[0][0].setAttribute("href","img/smoke-"+newData[i].continent+".png");
+            // duplicateSmoke[0][0].setAttribute('class','smoke smoke'+i);
+            // duplicateSmoke[0][0].setAttribute('rank',i)
+
+            // g.append("image")
+            // .attr("xlink:href","img/smoke-"+newData[i].continent+".png")
+            // .attr('x',function() { return xScale(400)+10; })
+            // .attr('y',-co2Scale(newData[i].co2)*0.5+420 )
+            // .attr('width',co2Scale(newData[i].co2))
+            // .attr('height',co2Scale(newData[i].co2))
+            // .attr('rank',i)
+            // .attr('class','smoke smoke'+i)
+            // .attr('co2',co2Scale(newData[i].co2))
+            // .style('animation-delay',0.2*i+'s')
           } else {
-              existingSmoke[0][i]
-              .setAttribute('width',co2Scale(newData[i].co2));
+              // Repurpose existing smoke
+              existingSmoke[0][i].setAttribute('width',co2Scale(newData[i].co2));
               existingSmoke[0][i].setAttribute('height',co2Scale(newData[i].co2))
               existingSmoke[0][i].setAttribute('y',-co2Scale(newData[i].co2)*0.5+420);
           }
@@ -383,9 +374,13 @@ var scrollVis = function() {
             existingSmoke.each(function(d,i) {
               var elt = d3.select(this);
               if(elt.attr('rank')>14) {
+                // elt.attr('class','smokeduplicate');
                 elt.remove();
               }
             });
+            console.log("All repurposing done");
+            console.log(document.getElementsByClassName('smoke').length);
+            // console.log(document.getElementsByClassName('smokeduplicate').length);
         },500);
       }
     }
@@ -395,112 +390,112 @@ var scrollVis = function() {
   var lineSvg;
   // Insert line here
   function setupLine(year) {
-  var gy;
-  var margins = {top: 30, right: 100, bottom: 100, left: 80},
-    width = 1000 - margins.left - margins.right,
-    height = 300 - margins.top - margins.bottom;
+    var gy;
+    var margins = {top: 30, right: 100, bottom: 100, left: 80},
+      width = 1000 - margins.left - margins.right,
+      height = 300 - margins.top - margins.bottom;
 
-  var sector = ["Electricity", "Manufacturing","Transportation", "Other Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use and Forestry", "Bunker Fuels"]
-  var id = [1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012]
+    var sector = ["Electricity", "Manufacturing","Transportation", "Other Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use and Forestry", "Bunker Fuels"]
+    var id = [1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012]
 
-  var x = d3.scale.linear().range([0, width]);
-  var y = d3.scale.linear().range([height, 0]);
-   
-  // Define the axes
-  var xAxis = d3.svg.axis().scale(x)
-    .orient("bottom").ticks(10).tickFormat(function(d,i){
-            return sector[i];
-        });
-   
-  var yAxis = d3.svg.axis().scale(y)
-    .orient("left").ticks(6)
-    .tickSize(width)
-    .outerTickSize(0)
-      .orient("right");
-   
-  // Define the line
-  var valueline = d3.svg.line()
-    .x(function(d) { return x(d.sector); })
-    .y(function(d) { return y(d.amount); });
+    var x = d3.scale.linear().range([0, width]);
+    var y = d3.scale.linear().range([height, 0]);
+     
+    // Define the axes
+    var xAxis = d3.svg.axis().scale(x)
+      .orient("bottom").ticks(10).tickFormat(function(d,i){
+              return sector[i];
+          });
+     
+    var yAxis = d3.svg.axis().scale(y)
+      .orient("left").ticks(6)
+      .tickSize(width)
+      .outerTickSize(0)
+        .orient("right");
+     
+    // Define the line
+    var valueline = d3.svg.line()
+      .x(function(d) { return x(d.sector); })
+      .y(function(d) { return y(d.amount); });
 
-  lineSvg = d3.select("#vis1")
-  .append("svg")
-    .attr("width", width + margins.left + margins.right)
-    .attr("height", height + margins.top + margins.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
+    lineSvg = d3.select("#vis1")
+    .append("svg")
+      .attr("width", width + margins.left + margins.right)
+      .attr("height", height + margins.top + margins.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
 
-    // Get the data
-  d3.csv("line_data.csv", function(error, data) {
-      if(error){
-      console.log( error ) ;
-    }
+      // Get the data
+    d3.csv("line_data.csv", function(error, data) {
+        if(error){
+        console.log( error ) ;
+      }
 
-    data.forEach(function(d) {
-      d.year = +d.year;
-      d.sector = +d.sector;
-      d.amount = +d.amount;
-      
+      data.forEach(function(d) {
+        d.year = +d.year;
+        d.sector = +d.sector;
+        d.amount = +d.amount;
+        
+      });
+     
+      // Scale the range of the data
+      x.domain([d3.min(data, function(d) { return d.sector; }), d3.max(data, function(d) { return d.sector; })]);
+      y.domain([0, d3.max(data, function(d) { return d.amount; })]);
+
+      var dataNest = d3.nest()
+          .key(function(d) {return d.year;})
+          .entries(data);
+
+          console.log(dataNest);
+     
+      var count = -1;
+      dataNest.forEach(function(d) {
+        count++;
+            lineSvg.append("path")
+              .attr("class","line2")
+                .attr("id", id[count])
+                .attr("d", valueline(d.values))
+                .attr("opacity", 0)
+                .attr("stroke", "grey");
+      });
+
+      for(var i=1990;i<year;i=i+2){
+        document.getElementById(i).setAttribute("opacity","0.3");
+        document.getElementById(i).setAttribute("stroke-width",1);
+        document.getElementById(i).addEventListener('mouseover', on, false);
+        document.getElementById(i).addEventListener('mouseout', out, false);
+      }
+
+      document.getElementById(year).setAttribute("stroke","#336B87");
+      document.getElementById(year).setAttribute("opacity","1");
+      document.getElementById(year).setAttribute("stroke-width",2);
+     
+      // Add the X Axis
+      lineSvg.append("g")   
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+          .attr("y", 9)
+          .attr("x", 9)
+          .attr("dy", ".35em")
+          .attr("transform", "rotate(30)")
+          .style("text-anchor", "start"); 
+     
+      // Add the Y Axis
+      gy = lineSvg.append("g")    
+        .attr("class", "y axis")
+        .call(yAxis);
+
+      gy.selectAll("g").filter(function(d) { return d; })
+          .classed("minor", true);
+
+      gy.selectAll("text")
+          .attr("x", -48)
+          .attr("dy", 5);
+        FILE_LOADED = true;
     });
-   
-    // Scale the range of the data
-    x.domain([d3.min(data, function(d) { return d.sector; }), d3.max(data, function(d) { return d.sector; })]);
-    y.domain([0, d3.max(data, function(d) { return d.amount; })]);
-
-    var dataNest = d3.nest()
-        .key(function(d) {return d.year;})
-        .entries(data);
-
-        console.log(dataNest);
-   
-    var count = -1;
-    dataNest.forEach(function(d) {
-      count++;
-          lineSvg.append("path")
-            .attr("class","line2")
-              .attr("id", id[count])
-              .attr("d", valueline(d.values))
-              .attr("opacity", 0)
-              .attr("stroke", "grey");
-    });
-
-    for(var i=1990;i<year;i=i+2){
-      document.getElementById(i).setAttribute("opacity","0.3");
-      document.getElementById(i).setAttribute("stroke-width",1);
-      document.getElementById(i).addEventListener('mouseover', on, false);
-      document.getElementById(i).addEventListener('mouseout', out, false);
-    }
-
-    document.getElementById(year).setAttribute("stroke","#336B87");
-    document.getElementById(year).setAttribute("opacity","1");
-    document.getElementById(year).setAttribute("stroke-width",2);
-   
-    // Add the X Axis
-    lineSvg.append("g")   
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
-      .selectAll("text")
-        .attr("y", 9)
-        .attr("x", 9)
-        .attr("dy", ".35em")
-        .attr("transform", "rotate(30)")
-        .style("text-anchor", "start"); 
-   
-    // Add the Y Axis
-    gy = lineSvg.append("g")    
-      .attr("class", "y axis")
-      .call(yAxis);
-
-    gy.selectAll("g").filter(function(d) { return d; })
-        .classed("minor", true);
-
-    gy.selectAll("text")
-        .attr("x", -48)
-        .attr("dy", 5);
-      FILE_LOADED = true;
-  });
-}
+  }
 
 var FILE_LOADED = false;
 
