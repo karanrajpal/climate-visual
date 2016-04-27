@@ -324,16 +324,16 @@ var scrollVis = function() {
             // duplicateSmoke[0][0].setAttribute('class','smoke smoke'+i);
             // duplicateSmoke[0][0].setAttribute('rank',i)
 
-            // g.append("image")
-            // .attr("xlink:href","img/smoke-"+newData[i].continent+".png")
-            // .attr('x',function() { return xScale(400)+10; })
-            // .attr('y',-co2Scale(newData[i].co2)*0.5+420 )
-            // .attr('width',co2Scale(newData[i].co2))
-            // .attr('height',co2Scale(newData[i].co2))
-            // .attr('rank',i)
-            // .attr('class','smoke smoke'+i)
-            // .attr('co2',co2Scale(newData[i].co2))
-            // .style('animation-delay',0.2*i+'s')
+            g.append("image")
+            .attr("xlink:href","img/smoke-"+newData[i].continent+".png")
+            .attr('x',function() { return xScale(400)+10; })
+            .attr('y',-co2Scale(newData[i].co2)*0.5+420 )
+            .attr('width',co2Scale(newData[i].co2))
+            .attr('height',co2Scale(newData[i].co2))
+            .attr('rank',i)
+            .attr('class','smoke smoke'+i)
+            .attr('co2',co2Scale(newData[i].co2))
+            .style('animation-delay',0.2*i+'s')
           } else {
               // Repurpose existing smoke
               existingSmoke[0][i].setAttribute('width',co2Scale(newData[i].co2));
@@ -701,6 +701,21 @@ function line(){
 };
 
 
+function setupSteps(data) {
+  var parent = document.getElementById("sections");
+  var buffer = '';
+  data.forEach(function(d) {
+    var step = '<div id="sections">\
+    <section class="step">\
+        <div class="title">'+d.year+'</div>\
+        <div class="news">'+d.news+'</div>\
+      </section>';
+    buffer+=step;
+  });
+  parent.innerHTML = buffer;
+}
+
+
 /**
  * display - called once data
  * has been loaded.
@@ -741,4 +756,5 @@ function display(data) {
 }
 
 // load data and display
+d3.csv("data/news.csv", setupSteps);
 d3.csv("data/co2_data.csv", display);
