@@ -159,10 +159,9 @@ var scrollVis = function() {
     // Most sections do not need to be updated
     // for all scrolling and so are set to
     // no-op functions.
-    for(var i = 0; i < 22; i++) {
+    for(var i = 0; i < 40; i++) {
       updateFunctions[i] = function() {};
     }
-      updateFunctions[7] = function() {};
   };
 
   /**
@@ -194,7 +193,7 @@ var scrollVis = function() {
   var CURRENT_YEAR = 1990;
 
   function showCountryEmissions() {
-    var year = (activeIndex-1)*2+1990;
+    var year = CURRENT_YEAR;
     if(year>2012) {
       return;
     }
@@ -545,7 +544,7 @@ var out = function (event) {
         };
 
 function line(){
-  var year = (activeIndex-1)*2 + 1990;
+  var year = CURRENT_YEAR;
   if(year>2012) { return; }
   // Adds the svg canvas
   if(SECTION_LINE_SHOWING == false) {
@@ -710,7 +709,7 @@ function line(){
     var padding = 20;
 
 
-    var year = (activeIndex-1)*2+1990;
+    var year = CURRENT_YEAR;
     if(year<=2012) {
       height=200;
       domain_max = 100;
@@ -759,7 +758,7 @@ function line(){
   function updateThermometerWidth(parentNum) {
     // Find the thermometer element with that id. Set the width of the inner bar and animate it.
     // var year = (activeIndex-1)*2+1990;
-    var year = (activeIndex-1)*2+1990;
+    var year = CURRENT_YEAR;
     console.log(year);
     if(year<=2012) {
       document.getElementById('thermometer1').className = '';
@@ -799,12 +798,13 @@ function line(){
    */
   chart.activate = function(index) {
     activeIndex = index;
+    CURRENT_YEAR = yearsArr[activeIndex];
     var sign = (activeIndex - lastIndex) < 0 ? -1 : 1;
     var scrolledSections = d3.range(lastIndex + sign, activeIndex + sign, sign);
     scrolledSections.forEach(function(i) {
       activateFunctions[i]();
       console.log("ActiveIndex "+activeIndex);
-      // CURRENT_YEAR = years[activeIndex+1];
+      console.log("CURRENT YEAR"+CURRENT_YEAR);
     });
     lastIndex = activeIndex;
   };
@@ -823,11 +823,14 @@ function line(){
   return chart;
 };
 
+var yearsArr = [];
+
 
 function setupSteps(data) {
   var parent = document.getElementById("sections");
   var buffer = '';
   data.forEach(function(d) {
+    yearsArr.push(d.year);
     var step = '<div id="sections">\
     <section class="step">\
         <div class="title">'+d.year+'</div>\
