@@ -141,11 +141,15 @@ var scrollVis = function() {
       activateFunctions[i] = function() {
         line();
         showCountryEmissions();
-        handleThermometer("#vis3");
+        handleThermometer(2);
       }
     }
     for(var i = 13; i < 28; i++) {
-      activateFunctions[i] = showCarbonBudget;
+      activateFunctions[i] = function() {
+        showCarbonBudget();
+        handleThermometer(1);
+        handleThermometer(2);
+      }
     }
 
     // updateFunctions are called while
@@ -189,11 +193,12 @@ var scrollVis = function() {
   var CURRENT_YEAR = 1990;
 
   function showCountryEmissions() {
-    if(activeIndex>12) {
+    var year = (activeIndex-1)*2+1990;
+    if(year>2012) {
       return;
     }
     var counter = -1;
-    var newData = co2Data[activeIndex*2].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
+    var newData = co2Data[(activeIndex-1)*2].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
     var newRank = [];
     var newCo2 = [];
     newData.forEach(function(d) {
@@ -532,7 +537,8 @@ var out = function (event) {
         };
 
 function line(){
-  var year = activeIndex*2 + 1989;
+  var year = (activeIndex-1)*2 + 1990;
+  if(year>2012) { return; }
   // Adds the svg canvas
   if(SECTION_LINE_SHOWING == false) {
     setupLine(year);
@@ -629,28 +635,107 @@ function line(){
     // Call setupWorldSmoke
   }
 
-  function setupThermometer(parent) {
+  var recSvg;
+  function setupThermometer(parentNum) {
     // Create the svg and append it to the parent id with the width set to 100%;
+    recSvg = d3.select("#thermometer"+parentNum)
+      .append("svg")
+      .attr({
+        "width": '100%',
+        "height": '100%'
+        })
+      .append("g");
+      // .attr("transform","");
+
+
+      recSvg.append("rect")
+        .attr("id","outerRECT"+parentNum)
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("height",'100%')
+        .attr("width",'100%')
+        .attr("fill","red")
+        .attr("stroke-width",2)
+        .attr("stroke","black");
+
+      recSvg.append("rect")
+        .attr("id","innerRECT"+parentNum)
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("height",'100%')
+        .attr("width",'100%')
+        .attr("fill","white")
+    .attr("stroke-width",2)
+        .attr("stroke","black");
+
+      RECT_LOADED = true;
+
   }
 
-  function handleThermometer(parent) {
+  var SECTION_RECT_SHOWING = false;
+  var RECT_LOADED = false;
+  function handleThermometer(parentNum) {
     // If thermometer exists, call updateThermometer to set the height.
     // If thermometer does not exist, create it by calling setupThermometer and then call updateThermometer to set the height
     // Call updateThermometerWidth to set the width to the small size
-  }
 
-  function updateThermometerHeight(id) {
+    if(SECTION_RECT_SHOWING == false) {
+      setupThermometer(parentNum);
+      SECTION_RECT_SHOWING = true;
+    }
+    else {
+      updateThermometerWidth(parentNum);
+      updateThermometerHeight(parentNum);
+    }
+  }
+  //define the size of divs!!!!!!!!!!!!!!!
+  function updateThermometerHeight(parentNum) {
     // Find the thermometer element with that id. Set the height of the inner bar and animate it.
-    // year = activeIndex+1989
+
+    //var height = document.getElementById('thermometer1').clientHeight,
+    var padding = 20;
+
+
+    var year = (activeIndex-1)*2+1990;
+    if(year<=2012) {
+      height=200;
+    } else {
+      height = 300;
+    }
+    // console.log(height);
+    var yScale = d3.scale.linear()
+        .domain([0,630])
+        .range([height - padding, padding]);
+
+    d3.csv("data/carbon_budget.csv", function(error, data) {
+      if(error){
+      console.log( error ) ;
+      }
+
+      var rect_height = data[year-1990].situation1;
+      console.log("Setting height as "+yScale(rect_height)/height);
+      document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
+    });
+
   }
 
-  function updateThermometerWidth(id,width) {
+  function updateThermometerWidth(parentNum) {
     // Find the thermometer element with that id. Set the width of the inner bar and animate it.
-    // year = activeIndex+1989
+    // var year = (activeIndex-1)*2+1990;
+    var year = (activeIndex-1)*2+1990;
+    console.log(year);
+    if(year<=2012) {
+      document.getElementById('thermometer1').className = '';
+    } else {
+      document.getElementById('thermometer1').className = 'tleft';
+      document.getElementById('thermometer2').className = 'tright';
+    }
   }
 
   /**
    * UPDATE FUNCTIONS
+
+
    *
    * These will be called within a section
    * as the user scrolls through it.

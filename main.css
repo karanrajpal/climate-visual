@@ -209,11 +209,33 @@ path {
   fill: pink;
 }
 
-
 #thermometer1 {
   position: fixed;
   right: 10px;
   top: 50px;
   width: 50px;
   height: 200px;
+<<<<<<< HEAD
+  -webkit-transition: all 0.6s;
+}
+.tleft {
+  right: 120px !important;
+  top: 100px !important;
+  width: 400px !important;
+  height: 300px !important;
+}
+#thermometer2 {
+  position: fixed;
+  right: 10px;
+  top: 50px;
+  width: 50px;
+  height: 200px;
+  -webkit-transition: all 0.6s;
+}
+.tright {
+  right: 60px !important;
+  top: 60px !important;
+  width: 400px !important;
+  height: 300px !important;
+
 }
