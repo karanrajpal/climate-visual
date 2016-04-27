@@ -249,7 +249,7 @@ var scrollVis = function() {
           for (var i = 0; i < 1; i++) {
             g.append("image")
             .attr("xlink:href","img/smoke-"+d.continent+".png")
-            .attr('x',function() { return xScale(counter2); })
+            .attr('x',function() { return xScale(counter2)-(co2Scale(d.co2)/6); })
             .attr('y',-co2Scale(d.co2)*0.5+420 )
             .attr('width',co2Scale(d.co2))
             .attr('height',co2Scale(d.co2))
@@ -292,11 +292,11 @@ var scrollVis = function() {
           if(nR>=0) {
             existingElements[0][i].setAttribute('rank',nR);
             existingIcons[0][i].setAttribute('rank',nR);
-            existingSmoke[0][i].setAttribute('rank',nR);
+            // existingSmoke[0][i].setAttribute('rank',nR);
           } else {
             existingElements[0][i].setAttribute('rank',15);
             existingIcons[0][i].setAttribute('rank',15);
-            existingSmoke[0][i].setAttribute('rank',15);
+            // existingSmoke[0][i].setAttribute('rank',15);
           }
         }
 
@@ -329,22 +329,28 @@ var scrollVis = function() {
             // duplicateSmoke[0][0].setAttribute('class','smoke smoke'+i);
             // duplicateSmoke[0][0].setAttribute('rank',i)
 
-            g.append("image")
-            .attr("xlink:href","img/smoke-"+newData[i].continent+".png")
-            .attr('x',function() { return xScale(400)+10; })
-            .attr('y',-co2Scale(newData[i].co2)*0.5+420 )
-            .attr('width',co2Scale(newData[i].co2))
-            .attr('height',co2Scale(newData[i].co2))
-            .attr('rank',i)
-            .attr('class','smoke smoke'+i)
-            .attr('co2',co2Scale(newData[i].co2))
-            .style('animation-delay',0.2*i+'s')
+            // g.append("image")
+            // .attr("xlink:href","img/smoke-"+newData[i].continent+".png")
+            // .attr('x',function() { return xScale(400)+10; })
+            // .attr('y',-co2Scale(newData[i].co2)*0.5+420 )
+            // .attr('width',co2Scale(newData[i].co2))
+            // .attr('height',co2Scale(newData[i].co2))
+            // .attr('rank',i)
+            // .attr('class','smoke smoke'+i)
+            // .attr('co2',co2Scale(newData[i].co2))
+            // .style('animation-delay',0.2*i+'s')
           } else {
               // Repurpose existing smoke
-              existingSmoke[0][i].setAttribute('width',co2Scale(newData[i].co2));
-              existingSmoke[0][i].setAttribute('height',co2Scale(newData[i].co2))
-              existingSmoke[0][i].setAttribute('y',-co2Scale(newData[i].co2)*0.5+420);
+              // existingSmoke[0][i].setAttribute('width',co2Scale(newData[i].co2));
+              // existingSmoke[0][i].setAttribute('height',co2Scale(newData[i].co2))
+              // existingSmoke[0][i].setAttribute("href","img/smoke-"+newData[i].continent+".png");
+              // existingSmoke[0][i].setAttribute('y',-co2Scale(newData[i].co2)*0.5+420);
           }
+          existingSmoke[0][i].setAttribute('width',co2Scale(newData[i].co2));
+          existingSmoke[0][i].setAttribute('height',co2Scale(newData[i].co2));
+          existingSmoke[0][i].setAttribute("href","img/smoke-"+newData[i].continent+".png");
+          existingSmoke[0][i].setAttribute('y',-co2Scale(newData[i].co2)*0.5+420);
+          existingSmoke[0][i].setAttribute('x',xScale(i)-(co2Scale(newData[i].co2)/6));
         }
 
         setTimeout(function() {
@@ -358,9 +364,9 @@ var scrollVis = function() {
           .delay(delay)
           .attr('x', function(d,i) { var elt = d3.select(this); return xScale(elt.attr('rank'))+10; })
 
-          transition.selectAll('.smoke')
-          .delay(delay)
-          .attr('x', function(d,i) { var elt = d3.select(this); return xScale(elt.attr('rank'))+10; })
+          // transition.selectAll('.smoke')
+          // .delay(delay)
+          // .attr('x', function(d,i) { var elt = d3.select(this); return xScale(elt.attr('rank'))+10; })
         },1);
 
         setTimeout(function() {
@@ -376,13 +382,13 @@ var scrollVis = function() {
                 elt.remove();
               }
             });
-            existingSmoke.each(function(d,i) {
-              var elt = d3.select(this);
-              if(elt.attr('rank')>14) {
-                // elt.attr('class','smokeduplicate');
-                elt.remove();
-              }
-            });
+            // existingSmoke.each(function(d,i) {
+            //   var elt = d3.select(this);
+            //   if(elt.attr('rank')>14) {
+            //     // elt.attr('class','smokeduplicate');
+            //     elt.remove();
+            //   }
+            // });
             console.log("All repurposing done");
             console.log(document.getElementsByClassName('smoke').length);
             // console.log(document.getElementsByClassName('smokeduplicate').length);
@@ -665,7 +671,7 @@ function line(){
         .attr("height",'100%')
         .attr("width",'100%')
         .attr("fill","white")
-    .attr("stroke-width",2)
+        .attr("stroke-width",2)
         .attr("stroke","black");
 
       RECT_LOADED = true;

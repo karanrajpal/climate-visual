@@ -111,6 +111,7 @@
 
 .smoke, .smokeduplicate {
   -webkit-animation: smoking 3s infinite;
+  -webkit-transition: all 0.5s;
 }
 
 @-webkit-keyframes smoking {
