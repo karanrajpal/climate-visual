@@ -667,7 +667,7 @@ function line(){
 
   function setupWorldAnimation(parentNum) {
     var worlds = document.getElementsByClassName('world'+parentNum);
-    var colors = ['America','Asia','Europe','Asia','Europe','Europe','Asia','Europe','America','Europe']
+    var colors = ['America','Asia','Europe','Asia','Europe','Europe','Asia','Europe','America','Europe'];
     var xScale = d3.scale.linear()
     .domain([0,10])
     .range([0, width]);
@@ -688,6 +688,7 @@ function line(){
     document.getElementById('world'+parentNum).style.opacity = 1;
     document.getElementsByClassName('smokeduplicate')[0].classList.remove('small');
     var worlds = document.getElementsByClassName('world'+parentNum);
+    setTimeout(function() { document.getElementById('vis').classList.remove('shown'); },10);
     for (var i = 0; i < worlds.length; i++) {
       worlds[i].style = '';
       worlds[i].src='img/city-World.png';
