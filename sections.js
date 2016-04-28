@@ -776,7 +776,7 @@ function line(){
       height=200;
       domain_max = 100;
     } else {
-      height = 300;
+      height = 250;
       domain_max = 650;
     }
     // console.log(height);
@@ -833,7 +833,21 @@ function line(){
     // var year = (activeIndex-1)*2+1990;
     var year = CURRENT_YEAR;
     console.log(year);
-    if(year>=1990 && year<=2012) {
+    if(year =="The End?"){
+      document.getElementById('thermometer1').className = '';
+      document.getElementById('thermometer2').className = '';
+      document.getElementById('thermworld1').className = '';
+      document.getElementById('thermworld2').className = '';
+      document.getElementById('thermtext1').className = '';
+      document.getElementById('thermtext2').className = '';
+      document.getElementById('thermtext3').className = '';
+      document.getElementById('thermtext4').className = '';
+      document.getElementById('thermlable').className = '';
+      document.getElementById('thermlable2').className = '';
+      document.getElementById('end').className = 'shown';
+
+    }
+    else if(year>=1990 && year<=2012) {
       document.getElementById('thermometer1').className = 'shown';
       document.getElementById('thermlable').className = 'shown';
       document.getElementById('thermlable2').className = 'shown';
@@ -844,6 +858,7 @@ function line(){
       document.getElementById('thermtext2').className = '';
       document.getElementById('thermtext3').className = '';
       document.getElementById('thermtext4').className = '';
+      document.getElementById('end').className = '';
     } else if(year>2012) {
       document.getElementById('thermometer1').className = 'tleft';
       document.getElementById('thermometer2').className = 'tright';
@@ -855,6 +870,7 @@ function line(){
       document.getElementById('thermtext4').className = 'shown';
       document.getElementById('thermlable').className = '';
       document.getElementById('thermlable2').className = '';
+      document.getElementById('end').className = '';
     } else {
       document.getElementById('thermometer1').className = 'big';
       document.getElementById('thermometer2').className = '';
@@ -866,6 +882,7 @@ function line(){
       document.getElementById('thermtext4').className = '';
       document.getElementById('thermlable').className = '';
       document.getElementById('thermlable2').className = '';
+      document.getElementById('end').className = '';
     }
   }
 
