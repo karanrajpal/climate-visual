@@ -1,3 +1,6 @@
+* {
+  font-family: 'Lato';
+}
 /* Scroller code */
 .container {
   /*background-color: purple;*/
@@ -419,8 +422,17 @@ path {
 
 .tooltip rect {
   fill: #666;
+  z-index: 500000000000;
+  /*stroke: #111;*/
 }
 .tooltip text {
-  font-size: 11pt;
-  stroke: #fff;
+  font-size: 12px;
+  fill: #fff;
+  font-weight: lighter;
+  font-family: 'Lato';
+  letter-spacing: '4px';
+  z-index: 500000000000;
+}
+.co2label {
+  font-weight: normal !important;
 }
