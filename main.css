@@ -274,7 +274,19 @@ path {
   text-align: left;
   width: 100%;
 }
-#explanation{
+#explanation1{
+  z-index: 2000000;
+  position: fixed;
+  top:210px;
+  right:10px;
+  left:10px;
+  font-size: 25px;
+  color: #F1F1F2;
+  text-align: center;
+  text-align: justify;
+  width: 99%;
+}
+#explanation2{
   z-index: 2000000;
   position: fixed;
   top:250px;
@@ -315,7 +327,7 @@ path {
   top: 40px;
   font-size: 50px;
   font-family: "Arial Black";
-  color: black;
+  color: #520a0a;;
   text-align: left;
   width: 100%;
 }

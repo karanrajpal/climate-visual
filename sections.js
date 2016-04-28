@@ -410,7 +410,7 @@ var scrollVis = function() {
   // Insert line here
   function setupLine(year) {
     var gy;
-    var margins = {top: 30, right: 100, bottom: 100, left: 80},
+    var margins = {top: 50, right: 100, bottom: 100, left: 80},
       width = 900 - margins.left - margins.right,
       height = 300 - margins.top - margins.bottom;
 
@@ -499,7 +499,13 @@ var scrollVis = function() {
           .attr("x", 9)
           .attr("dy", ".35em")
           .attr("transform", "rotate(30)")
-          .style("text-anchor", "start"); 
+          .style("text-anchor", "start");
+
+      lineSvg.append("text")
+       .text("World Total CO2 Emissions by Sector(MtCO2)")
+       .attr("x",150)
+       .attr("y",-10)
+       .attr("font-size",20); 
      
       // Add the Y Axis
       gy = lineSvg.append("g")    
