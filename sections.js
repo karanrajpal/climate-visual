@@ -361,7 +361,14 @@ var scrollVis = function() {
             .attr('y',function(d) { return yScaleCo2(-10.0); })
             .attr('class','country-text '+newData[i].continent)
             .attr('rank',i)
-            .on('click',function(d) {  });
+            .on('mouseover', function(d) {
+              var rank = d3.select(this).attr('rank');
+              d3.select('.tooltip'+rank).style({opacity: '1.0'});
+            })
+            .on('mouseout', function(d) {
+              var rank = d3.select(this).attr('rank');
+              d3.select('.tooltip'+rank).style({opacity: '0.0'});
+            });
 
             g.append("svg:image")
             .attr("xlink:href","img/city-"+newData[i].continent+".png")
@@ -1031,5 +1038,8 @@ function display(data) {
 }
 
 // load data and display
+window.onbeforeunload = function(){
+  window.scrollTo(0,0);
+}
 d3.csv("data/news.csv", setupSteps);
 d3.csv("data/co2_data.csv", display);
