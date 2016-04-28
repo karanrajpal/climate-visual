@@ -185,20 +185,20 @@ path {
 }
 
 .Europe {
-  fill: red;
+  fill: #4897D8;
 }
 .America {
-  fill: orange;
+  fill: #CF3721;
   /*fill: orange;
   color: orange;
   background: orange;
   stroke: aqua;*/
 }
 .Asia {
-  fill: blue;
+  fill: #F9BA32;
 }
 .Africa {
-  fill: lightyellow;
+  fill: black;
 }
 .Antarctica {
   fill: aquamarine;
