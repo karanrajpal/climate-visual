@@ -143,6 +143,7 @@ var scrollVis = function() {
         showCountryEmissions();
         handleThermometer(1);
         handleThermometer(2);
+        setupWorldAnimation(1);
       }
     }
     for(var i = 13; i < 28; i++) {
@@ -212,9 +213,11 @@ var scrollVis = function() {
     // if(SECTION_2_SHOWING) {
     document.getElementById('vis2').style.display = 'none';
     document.getElementById('vis').style.display = 'inline-block';
+    setTimeout(function() { document.getElementById('vis').classList.add('shown'); },1000);
     document.getElementById('vis1').style.display = 'block';
     document.getElementById('thermometer1').style.display = 'block';
     document.getElementById('overview').style.display = 'none';
+    document.getElementsByClassName('smokeduplicate')[0].classList.add('small');
     document.getElementById('text_rect1').style.display = 'block';
 
     // }
@@ -261,7 +264,7 @@ var scrollVis = function() {
             .attr('rank',counter2)
             .attr('class','smoke smoke'+counter2)
             .attr('co2',co2Scale(d.co2))
-            // .style('animation-delay',0.2*i+'s')
+            .style('animation-delay',1+'s')
             // .style('animation-duration',30/co2Scale(d.co2)+'s');
             // .style('animation-delay',0.2*i+'s')
           };
@@ -644,7 +647,7 @@ function line(){
   function showOverview() {
     // Call setupThermometer
     // Call updateThermometer
-    // Call setupWorldIcon
+    // Call setupWorldAnimation
     // Call setupWorldSmoke
 
     document.getElementById('vis2').style.display = 'none';
@@ -659,6 +662,37 @@ function line(){
     updateThermometerHeight(1);
     updateThermometerWidth();
     document.getElementById('text_rect1').style.display = 'none';
+    reverseWorldAnimation(1); 
+  }
+
+  function setupWorldAnimation(parentNum) {
+    var worlds = document.getElementsByClassName('world'+parentNum);
+    var colors = ['America','Asia','Europe','Asia','Europe','Europe','Asia','Europe','America','Europe']
+    var xScale = d3.scale.linear()
+    .domain([0,10])
+    .range([0, width]);
+    for (var i = 0; i < worlds.length; i++) {
+      worlds[i].style.width = '20px';
+      worlds[i].style.height = '20px';
+      worlds[i].src='img/city-'+colors[i]+'.png';
+      worlds[i].style.left = (xScale(i)*2)-630+'px';
+      worlds[i].style.top = '577px';
+
+      setTimeout(function() {
+        document.getElementById('world'+parentNum).style.opacity = 0;
+      },2000);
+    }
+  }
+
+  function reverseWorldAnimation(parentNum) {
+    document.getElementById('world'+parentNum).style.opacity = 1;
+    document.getElementsByClassName('smokeduplicate')[0].classList.remove('small');
+    var worlds = document.getElementsByClassName('world'+parentNum);
+    for (var i = 0; i < worlds.length; i++) {
+      worlds[i].style = '';
+      worlds[i].src='img/city-World.png';
+      document.getElementsByClassName('smokeduplicate')[0].class = '';
+    }
   }
 
   var recSvg;

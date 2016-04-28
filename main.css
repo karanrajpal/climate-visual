@@ -48,6 +48,10 @@
   /* width: 600px; */
   /* background-color: #ddd; */
 }
+#vis {
+  opacity: 0;
+  -webkit-transition: all 0.5s;
+}
 
 #vis1 {
   position: fixed;
@@ -230,12 +234,12 @@ path {
   height: 300px !important;
 }
 .big {
-  right: 300px !important;
+  right: 200px !important;
   top: 100px !important;
-  width: 600px !important;
-  height: 450px !important;
+  width: 800px !important;
+  height: 300px !important;
   /*-webkit-transition: all 0s !important;*/
-  -webkit-transition: opacity 0.5s !important;
+  /*-webkit-transition: opacity 0.5s !important;*/
   opacity: 1 !important;
 }
 #thermometer2 {
@@ -262,4 +266,20 @@ path {
   color: black;
   text-align: center;
   width: 100%;
+}
+#world1 img {
+  position: fixed;
+  top: 620px;
+  width: 70px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  -webkit-transition: all 1s;
+}
+#world1 .smoke {
+  top: 570px;
+}
+.small {
+  width: 0px !important;
+  -webkit-transition: all 0.3s !important;
 }
