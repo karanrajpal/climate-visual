@@ -29,8 +29,13 @@ var scrollVis = function() {
     .domain([0,10])
     .range([0, width]);
 
-    var co2Scale = d3.scale.sqrt()
+  var co2Scale = d3.scale.sqrt()
     .domain([0,5000])
+    .range([0, 100]);
+
+
+  var co2ScaleBudget = d3.scale.sqrt()
+    .domain([0,300])
     .range([0, 100]);
 
   // var xScaleOrdinal = d3.scale.ordinal()
@@ -741,7 +746,6 @@ function line(){
 
   }
 
-  //var SECTION_RECT_SHOWING = false;
   var RECT_LOADED = false;
   function handleThermometer(parentNum) {
     // If thermometer exists, call updateThermometer to set the height.
@@ -750,7 +754,6 @@ function line(){
 
     if(document.getElementById('thermoSVG'+parentNum) == null) {
       setupThermometer(parentNum);
-      //SECTION_RECT_SHOWING = true;
     }
       updateThermometerWidth(parentNum);
       updateThermometerHeight(parentNum);
@@ -782,31 +785,21 @@ function line(){
         console.log( error ) ;
       }
 
-      if(parentNum == 1){
+      if(parentNum == 1) {
         if(year=="") { year = 1990; }
         if (year>2012) {
           var rect_height = data[year-1990].situation1;
-          //console.log("Setting height as "+yScale(rect_height)/height);
-          // var transition = svg.transition().duration(750);
-            // delay = function(d, i) { return i * 30; };
-          // transition.selectAll('.innerRECT'+parentNum)
-          //   .attr('height', function(d,i) { var elt = d3.select(this); debugger; return yScale(rect_height); })
+          document.getElementsByClassName('thermsmoke'+parentNum)[0].style.width=co2ScaleBudget(rect_height)+'px';
           document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
           document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
           document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
           document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
           document.getElementById('text_rect'+parentNum).setAttribute("font-size", 38);
           document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
-
         }
-        else{
+        else {
           var rect_height = data[year-1990].situation1;
-          //console.log("Setting height as "+yScale(rect_height)/height);
-          // var transition = svg.transition().duration(750);
-            // delay = function(d, i) { return i * 30; };
-          // transition.selectAll('.innerRECT'+parentNum)
-          //   .attr('height', function(d,i) { var elt = d3.select(this); debugger; return yScale(rect_height); })
-          document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
+          document.getElementById('innerRECT'+parentNum).setAttribute("height", co2ScaleBudget(rect_height));
           document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
           document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
           document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
@@ -814,14 +807,10 @@ function line(){
           document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";  
         }
       }
-      else{
+      else {
         if(year=="") { year = 1990; }
         var rect_height = data[year-1990].situation2;
-        //console.log("Setting height as "+yScale(rect_height)/height);
-        // var transition = svg.transition().duration(750);
-          // delay = function(d, i) { return i * 30; };
-        // transition.selectAll('.innerRECT'+parentNum)
-          // .attr('height', function(d,i) { var elt = d3.select(this); console.log(rect_height); return yScale(rect_height); })
+        document.getElementsByClassName('thermsmoke'+parentNum)[0].style.width=co2ScaleBudget(rect_height)+'px';
         document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
         document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
         document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
@@ -841,12 +830,24 @@ function line(){
     if(year>=1990 && year<=2012) {
       document.getElementById('thermometer1').className = 'shown';
       document.getElementById('thermometer2').className = '';
+      document.getElementById('thermworld1').className = '';
+      document.getElementById('thermworld2').className = '';
+      document.getElementById('thermtext1').className = '';
+      document.getElementById('thermtext2').className = '';
     } else if(year>2012) {
       document.getElementById('thermometer1').className = 'tleft';
       document.getElementById('thermometer2').className = 'tright';
+      document.getElementById('thermworld1').className = 'shown';
+      document.getElementById('thermworld2').className = 'shown';
+      document.getElementById('thermtext1').className = 'shown';
+      document.getElementById('thermtext2').className = 'shown';
     } else {
       document.getElementById('thermometer1').className = 'big';
       document.getElementById('thermometer2').className = '';
+      document.getElementById('thermworld1').className = '';
+      document.getElementById('thermworld2').className = '';
+      document.getElementById('thermtext1').className = '';
+      document.getElementById('thermtext2').className = '';
     }
   }
 

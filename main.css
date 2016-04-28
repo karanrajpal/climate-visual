@@ -113,7 +113,7 @@
  /*transform="rotate(30 20,40)*/
 }
 
-.smoke, .smokeduplicate {
+.smoke, .smokeduplicate, .thermsmoke {
   -webkit-animation: smoking 3s infinite;
   -webkit-transition: all 0.5s;
 }
@@ -286,6 +286,7 @@ path {
   text-align: justify;
   width: 99%;
 }
+
 #hint{
   z-index: 2000000;
   position: fixed;
@@ -322,7 +323,7 @@ path {
 
 #world1 img {
   position: fixed;
-  top: 620px;
+  top: 590px;
   width: 70px;
   margin: 0 auto;
   left: 0;
@@ -330,9 +331,42 @@ path {
   -webkit-transition: all 1s;
 }
 #world1 .smoke {
-  top: 570px;
+  top: 540px;
 }
 .small {
   width: 0px !important;
   -webkit-transition: all 0.3s !important;
+}
+.thermworld1, .thermworld2, .thermsmoke {
+  position: fixed;
+  top: 600px;
+  width: 70px;
+  margin: 0 auto;
+  left: 0px;
+  right: 200px;
+}
+.thermworld1, .thermsmoke1 {
+  left: 800px;
+  right: 0px;
+}
+#thermworld1, #thermworld2 {
+  opacity: 0;
+  -webkit-transition: all 1s;
+}
+.thermsmoke1, .thermsmoke2 {
+  top: 560px;
+}
+
+#thermtext1, #thermtext2 {
+  position: fixed;
+  top: 600px;
+  width: 70px;
+  margin: 0 auto;
+  left: 0px;
+  right: 200px;
+  opacity: 0;
+}
+#thermtext1 {
+  left: 800px;
+  right: 0px;
 }
