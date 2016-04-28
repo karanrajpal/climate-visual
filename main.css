@@ -269,34 +269,22 @@ path {
   z-index: 2000000;
   position: fixed;
   top:150px;
+  left:20px;
   font-size: 30px;
   color: #F1F1F2;
   text-align: left;
   width: 100%;
 }
-#explanation1{
-  z-index: 2000000;
-  position: fixed;
-  top:210px;
-  right:10px;
-  left:10px;
-  font-size: 25px;
-  color: #F1F1F2;
-  text-align: center;
-  text-align: justify;
-  width: 99%;
-}
-#explanation2{
+#explanation{
   z-index: 2000000;
   position: fixed;
   top:250px;
-  right:10px;
-  left:10px;
-  font-size: 25px;
+  left:20px;
+  font-size: 20px;
   color: #F1F1F2;
   text-align: center;
   text-align: justify;
-  width: 99%;
+  width: 90%;
 }
 #hint{
   z-index: 2000000;
@@ -327,7 +315,7 @@ path {
   top: 40px;
   font-size: 50px;
   font-family: "Arial Black";
-  color: #520a0a;;
+  color: black;
   text-align: left;
   width: 100%;
 }
