@@ -730,13 +730,18 @@ function line(){
       worlds[i].style.top = '577px';
 
       setTimeout(function() {
-        document.getElementById('world'+parentNum).style.opacity = 0;
+        if(CURRENT_YEAR!=='') {
+          document.getElementById('world'+parentNum).style.opacity = 0;
+        }
       },1500);
     }
   }
 
   function reverseWorldAnimation(parentNum) {
     document.getElementById('world'+parentNum).style.opacity = 1;
+    setTimeout(function() {
+      document.getElementById('world'+parentNum).style.opacity = 1;
+    },1500);
     document.getElementsByClassName('smokeduplicate')[0].classList.remove('small');
     var worlds = document.getElementsByClassName('world'+parentNum);
     setTimeout(function() { document.getElementById('vis').classList.remove('shown'); },10);
