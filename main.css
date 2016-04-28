@@ -234,10 +234,10 @@ path {
   height: 300px !important;
 }
 .big {
-  right: 200px !important;
-  top: 100px !important;
-  width: 800px !important;
-  height: 300px !important;
+  right: 0px !important;
+  top: 0px !important;
+  width: 100% !important;
+  height: 100% !important;
   /*-webkit-transition: all 0s !important;*/
   /*-webkit-transition: opacity 0.5s !important;*/
   opacity: 1 !important;
@@ -261,12 +261,63 @@ path {
 #overview {
   z-index: 2000000;
   position: fixed;
-  top: 10px;
+  top: 0px;
+  text-align: center;
+  width: 100%;
+}
+#description {
+  z-index: 2000000;
+  position: fixed;
+  top:150px;
+  font-size: 30px;
+  color: #F1F1F2;
+  text-align: center;
+  width: 100%;
+}
+#explanation{
+  z-index: 2000000;
+  position: fixed;
+  top:200px;
+  right:10px;
   font-size: 25px;
+  color: #F1F1F2;
+  text-align: center;
+  text-align: justify;
+  width: 100%;
+}
+#hint{
+  z-index: 2000000;
+  position: fixed;
+  top:400px;
+  font-size: 15px;
+  color: #F1F1F2;
+  text-align: center;
+  width: 100%;
+  span {
+  content: "\2193";}
+}
+#source{
+  z-index: 2000000;
+  position: fixed;
+  top:600px;
+  right:10px;
+  font-size: 10px;
+  color: #F1F1F2;
+  text-align: right;
+  width: 100%;
+}
+
+#title {
+  z-index: 2000000;
+  position: fixed;
+  top: 40px;
+  font-size: 50px;
+  font-family: "Arial Black";
   color: black;
   text-align: center;
   width: 100%;
 }
+
 #world1 img {
   position: fixed;
   top: 620px;
