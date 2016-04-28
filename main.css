@@ -271,24 +271,26 @@ path {
   top:150px;
   font-size: 30px;
   color: #F1F1F2;
-  text-align: center;
+  text-align: left;
   width: 100%;
 }
 #explanation{
   z-index: 2000000;
   position: fixed;
-  top:200px;
+  top:250px;
   right:10px;
+  left:10px;
   font-size: 25px;
   color: #F1F1F2;
   text-align: center;
   text-align: justify;
-  width: 100%;
+  width: 99%;
 }
 #hint{
   z-index: 2000000;
   position: fixed;
   top:400px;
+  left:0px;
   font-size: 15px;
   color: #F1F1F2;
   text-align: center;
@@ -314,7 +316,7 @@ path {
   font-size: 50px;
   font-family: "Arial Black";
   color: black;
-  text-align: center;
+  text-align: left;
   width: 100%;
 }
 
