@@ -269,6 +269,7 @@ path {
   z-index: 2000000;
   position: fixed;
   top:150px;
+  left:20px;
   font-size: 30px;
   color: #F1F1F2;
   text-align: left;
@@ -278,13 +279,12 @@ path {
   z-index: 2000000;
   position: fixed;
   top:250px;
-  right:10px;
-  left:10px;
-  font-size: 25px;
+  left:20px;
+  font-size: 20px;
   color: #F1F1F2;
   text-align: center;
   text-align: justify;
-  width: 99%;
+  width: 90%;
 }
 
 #hint{
