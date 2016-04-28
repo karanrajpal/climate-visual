@@ -246,10 +246,40 @@ var scrollVis = function() {
           g.append("text")
           .text( d.country )
           .attr('x',function(d) { counter2++; return xScale(counter2)+19; })
-          .attr('y',function(d) { return yScaleCo2(-10.0); })
+          .attr('y',yScaleCo2(-10.0))
           .attr('class','country-text '+d.continent)
           .attr('rank',counter2)
-          .on('click',function(d) {  });
+          .on('mouseover', function(d) {
+            var rank = d3.select(this).attr('rank');
+            d3.select('.tooltip'+rank).style({opacity: '1.0'});
+          })
+          .on('mouseout', function(d) {
+            var rank = d3.select(this).attr('rank');
+            d3.select('.tooltip'+rank).style({opacity: '0.0'});
+          });
+
+          var tooltip = g.append("g")
+            .attr('x',function(d) { return xScale(counter2)+19; })
+            .attr('y',yScaleCo2(-12.0))
+            .style({opacity: '0.0'})
+            .attr('class','tooltip tooltip'+counter2)
+            .attr('rank',counter2);
+
+          tooltip.append("rect")
+            .attr('x',function(d) { return xScale(counter2)+19; })
+            .attr('y',yScaleCo2(-12.0))
+            .attr('width',80)
+            .attr('height',60);
+
+            tooltip.append("text")
+            .attr('x',function(d) { return xScale(counter2)+19; })
+            .attr('y',yScaleCo2(-14.0))
+            .text(d.co2+" MT CO2");
+
+            tooltip.append("text")
+            .attr('x',function(d) { return xScale(counter2)+19; })
+            .attr('y',yScaleCo2(-16.0))
+            .text(d.continent);
         });
 
 
@@ -269,7 +299,7 @@ var scrollVis = function() {
             .attr('rank',counter2)
             .attr('class','smoke smoke'+counter2)
             .attr('co2',co2Scale(d.co2))
-            .style('animation-delay',1+'s')
+            .style('animation-delay',1+'s');
             // .style('animation-duration',30/co2Scale(d.co2)+'s');
             // .style('animation-delay',0.2*i+'s')
           };
@@ -691,7 +721,7 @@ function line(){
 
       setTimeout(function() {
         document.getElementById('world'+parentNum).style.opacity = 0;
-      },2000);
+      },1500);
     }
   }
 

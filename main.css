@@ -370,3 +370,11 @@ path {
   left: 800px;
   right: 0px;
 }
+
+.tooltip rect {
+  fill: #666;
+}
+.tooltip text {
+  font-size: 11pt;
+  stroke: #fff;
+}
