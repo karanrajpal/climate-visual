@@ -419,7 +419,7 @@ var scrollVis = function() {
       width = 900 - margins.left - margins.right,
       height = 300 - margins.top - margins.bottom;
 
-    var sector = ["Electricity", "Manufacturing","Transportation", "Other Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use and Forestry", "Bunker Fuels"]
+    var sector = ["Electricity", "Manufacturing","Transportation", "Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use", "Bunker Fuels"]
     var id = [1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012]
 
     var x = d3.scale.linear().range([0, width]);
@@ -805,12 +805,12 @@ function line(){
         }
         else {
           var rect_height = data[year-1990].situation1;
-          document.getElementById('innerRECT'+parentNum).setAttribute("height", co2ScaleBudget(rect_height));
+          document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
           document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
           document.getElementById('text_rect'+parentNum).setAttribute("x", 5);
           document.getElementById('text_rect'+parentNum).setAttribute("y", yScale(rect_height));
           document.getElementById('text_rect'+parentNum).setAttribute("font-size", 14);
-          document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";  
+          document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%"; 
         }
       }
       else {
@@ -835,11 +835,15 @@ function line(){
     console.log(year);
     if(year>=1990 && year<=2012) {
       document.getElementById('thermometer1').className = 'shown';
+      document.getElementById('thermlable').className = 'shown';
+      document.getElementById('thermlable2').className = 'shown';
       document.getElementById('thermometer2').className = '';
       document.getElementById('thermworld1').className = '';
       document.getElementById('thermworld2').className = '';
       document.getElementById('thermtext1').className = '';
       document.getElementById('thermtext2').className = '';
+      document.getElementById('thermtext3').className = '';
+      document.getElementById('thermtext4').className = '';
     } else if(year>2012) {
       document.getElementById('thermometer1').className = 'tleft';
       document.getElementById('thermometer2').className = 'tright';
@@ -847,6 +851,10 @@ function line(){
       document.getElementById('thermworld2').className = 'shown';
       document.getElementById('thermtext1').className = 'shown';
       document.getElementById('thermtext2').className = 'shown';
+      document.getElementById('thermtext3').className = 'shown';
+      document.getElementById('thermtext4').className = 'shown';
+      document.getElementById('thermlable').className = '';
+      document.getElementById('thermlable2').className = '';
     } else {
       document.getElementById('thermometer1').className = 'big';
       document.getElementById('thermometer2').className = '';
@@ -854,6 +862,10 @@ function line(){
       document.getElementById('thermworld2').className = '';
       document.getElementById('thermtext1').className = '';
       document.getElementById('thermtext2').className = '';
+      document.getElementById('thermtext3').className = '';
+      document.getElementById('thermtext4').className = '';
+      document.getElementById('thermlable').className = '';
+      document.getElementById('thermlable2').className = '';
     }
   }
 
