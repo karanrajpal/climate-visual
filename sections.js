@@ -912,8 +912,7 @@ function setupSteps(data) {
   var buffer = '';
   data.forEach(function(d) {
     yearsArr.push(d.year);
-    var step = '<div id="sections">\
-    <section class="step">\
+    var step = '<section class="step">\
         <div class="title">'+d.year+'</div>\
         <div class="news">'+d.news+'</div>\
       </section>';
