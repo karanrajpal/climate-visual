@@ -38,10 +38,6 @@ var scrollVis = function() {
     .domain([0,300])
     .range([0, 100]);
 
-  // var xScaleOrdinal = d3.scale.ordinal()
-  //   .domain(["Japan", "India", "China", "USA"])
-  //   .rangePoints([0, width]);
-
   var xAxisBar = d3.svg.axis()
     .scale(xScale)
     .orient("bottom")
@@ -205,7 +201,6 @@ var scrollVis = function() {
     }
     var counter = -1;
     var newData = co2Data[(activeIndex-1)*2].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
-    // var newData = co2Data[(activeIndex-1)*2].values.sort( function(a,b) { return parseInt(b.continent) - parseInt(a.continent); } ).slice(1,11);
     var newRank = [];
     var newCo2 = [];
     newData.forEach(function(d) {
@@ -215,7 +210,6 @@ var scrollVis = function() {
       newCo2.push(d.year);
     });
     document.getElementById('SAMPLE').innerHTML = newRank.join(' ')+'<br>'+newCo2.join(' ');
-    // if(SECTION_2_SHOWING) {
     document.getElementById('vis2').style.display = 'none';
     document.getElementById('vis').style.display = 'inline-block';
     setTimeout(function() { document.getElementById('vis').classList.add('shown'); },1000);
@@ -225,7 +219,6 @@ var scrollVis = function() {
     document.getElementsByClassName('smokeduplicate')[0].classList.add('small');
     document.getElementById('text_rect1').style.display = 'block';
 
-    // }
     if(!SECTION_1_SHOWING) {
       newData.forEach(function(d) {
         g.append("svg:image")
@@ -295,8 +288,7 @@ var scrollVis = function() {
         newData.forEach(function(d) {
           IS_SMOKE_SHOWING = true;
           counter2++;
-          // insertRuleForHeight(d.co2,counter2);
-          // for (var i = 0; i < co2Scale(d.co2)/10; i++) {
+          
           for (var i = 0; i < 1; i++) {
             g.append("image")
             .attr("xlink:href","img/smoke-"+d.continent+".png")
@@ -308,21 +300,9 @@ var scrollVis = function() {
             .attr('class','smoke smoke'+counter2)
             .attr('co2',co2Scale(d.co2))
             .style('animation-delay',1+'s');
-            // .style('animation-duration',30/co2Scale(d.co2)+'s');
-            // .style('animation-delay',0.2*i+'s')
           };
         });
 
-          // Creating a duplicate on the side for use later
-          // g.append("image")
-          // .attr("xlink:href","img/smoke-"+d.continent+".png")
-          // .attr('x',xScale(400)+10)
-          // .attr('y',-co2Scale(d.co2)*0.5+420 )
-          // .attr('width',co2Scale(100))
-          // .attr('height',co2Scale(100))
-          // .attr('rank',15)
-          // .attr('class','smokeduplicate')
-          // .attr('co2',co2Scale(100));
 
         SECTION_1_SHOWING = true;
     } else {
@@ -332,7 +312,6 @@ var scrollVis = function() {
         var existingElements = g.selectAll('.country-text');
         var existingIcons = g.selectAll('.graph-icon');
         var existingSmoke = g.selectAll('.smoke');
-        // var duplicateSmoke = g.selectAll('.smokeduplicate');
         var existingTooltips = g.selectAll('.tooltip');
         var oldRank = [];
         for (var i = 0; i < existingElements[0].length; i++) {
@@ -344,11 +323,9 @@ var scrollVis = function() {
           if(nR>=0) {
             existingElements[0][i].setAttribute('rank',nR);
             existingIcons[0][i].setAttribute('rank',nR);
-            // existingSmoke[0][i].setAttribute('rank',nR);
           } else {
             existingElements[0][i].setAttribute('rank',15);
             existingIcons[0][i].setAttribute('rank',15);
-            // existingSmoke[0][i].setAttribute('rank',15);
           }
         }
 
@@ -361,7 +338,14 @@ var scrollVis = function() {
             .attr('y',function(d) { return yScaleCo2(-10.0); })
             .attr('class','country-text '+newData[i].continent)
             .attr('rank',i)
-            .on('click',function(d) {  });
+            .on('mouseover', function(d) {
+              var rank = d3.select(this).attr('rank');
+              d3.select('.tooltip'+rank).style({opacity: '1.0'});
+            })
+            .on('mouseout', function(d) {
+              var rank = d3.select(this).attr('rank');
+              d3.select('.tooltip'+rank).style({opacity: '0.0'});
+            });
 
             g.append("svg:image")
             .attr("xlink:href","img/city-"+newData[i].continent+".png")
@@ -409,10 +393,6 @@ var scrollVis = function() {
           transition.selectAll('.graph-icon')
           .delay(delay)
           .attr('x', function(d,i) { var elt = d3.select(this); return xScale(elt.attr('rank'))+10; })
-
-          // transition.selectAll('.smoke')
-          // .delay(delay)
-          // .attr('x', function(d,i) { var elt = d3.select(this); return xScale(elt.attr('rank'))+10; })
         },1);
 
         setTimeout(function() {
@@ -428,16 +408,9 @@ var scrollVis = function() {
                 elt.remove();
               }
             });
-            // existingSmoke.each(function(d,i) {
-            //   var elt = d3.select(this);
-            //   if(elt.attr('rank')>14) {
-            //     // elt.attr('class','smokeduplicate');
-            //     elt.remove();
-            //   }
-            // });
+            
             console.log("All repurposing done");
             console.log(document.getElementsByClassName('smoke').length);
-            // console.log(document.getElementsByClassName('smokeduplicate').length);
         },500);
       }
     }
@@ -702,6 +675,9 @@ function line(){
 
     if(document.getElementById('thermoSVG1') == null) {
       setupThermometer(1);
+      document.getElementById('thermometer1').style.webkitTransition = 'all 0s';
+    } else {
+      document.getElementById('thermometer1').style.webkitTransition = 'all 0.6s';
     }
     updateThermometerHeight(1);
     updateThermometerWidth();
@@ -710,6 +686,7 @@ function line(){
   }
 
   function setupWorldAnimation(parentNum) {
+    document.getElementById('thermometer1').style.webkitTransition = 'all 0.6s';
     var worlds = document.getElementsByClassName('world'+parentNum);
     var colors = ['America','Asia','Europe','Asia','Europe','Europe','Asia','Europe','America','Europe'];
     var xScale = d3.scale.linear()
@@ -723,13 +700,18 @@ function line(){
       worlds[i].style.top = '577px';
 
       setTimeout(function() {
-        document.getElementById('world'+parentNum).style.opacity = 0;
+        if(CURRENT_YEAR!=='') {
+          document.getElementById('world'+parentNum).style.opacity = 0;
+        }
       },1500);
     }
   }
 
   function reverseWorldAnimation(parentNum) {
     document.getElementById('world'+parentNum).style.opacity = 1;
+    setTimeout(function() {
+      document.getElementById('world'+parentNum).style.opacity = 1;
+    },1500);
     document.getElementsByClassName('smokeduplicate')[0].classList.remove('small');
     var worlds = document.getElementsByClassName('world'+parentNum);
     setTimeout(function() { document.getElementById('vis').classList.remove('shown'); },10);
@@ -863,7 +845,6 @@ function line(){
 
   function updateThermometerWidth(parentNum) {
     // Find the thermometer element with that id. Set the width of the inner bar and animate it.
-    // var year = (activeIndex-1)*2+1990;
     var year = CURRENT_YEAR;
     console.log(year);
     if(year =="The End?"){
@@ -1031,5 +1012,8 @@ function display(data) {
 }
 
 // load data and display
+window.onbeforeunload = function(){
+  window.scrollTo(0,0);
+}
 d3.csv("data/news.csv", setupSteps);
 d3.csv("data/co2_data.csv", display);
