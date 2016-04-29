@@ -709,6 +709,9 @@ function line(){
 
     if(document.getElementById('thermoSVG1') == null) {
       setupThermometer(1);
+      document.getElementById('thermometer1').style.webkitTransition = 'all 0s';
+    } else {
+      document.getElementById('thermometer1').style.webkitTransition = 'all 0.6s';
     }
     updateThermometerHeight(1);
     updateThermometerWidth();
@@ -717,6 +720,7 @@ function line(){
   }
 
   function setupWorldAnimation(parentNum) {
+    document.getElementById('thermometer1').style.webkitTransition = 'all 0.6s';
     var worlds = document.getElementsByClassName('world'+parentNum);
     var colors = ['America','Asia','Europe','Asia','Europe','Europe','Asia','Europe','America','Europe'];
     var xScale = d3.scale.linear()
