@@ -438,3 +438,10 @@ path {
 .co2label {
   font-weight: normal !important;
 }
+#smokelable {
+  position: fixed;
+  top: 300px;
+  left: 350px;
+  font-size: 20px;
+  color: black;
+}
