@@ -333,9 +333,11 @@ path {
   left: 0;
   right: 0;
   -webkit-transition: all 1s;
+  z-index: 92;
 }
 #world1 .smoke {
   top: 540px;
+  z-index: 92;
 }
 .small {
   width: 0px !important;
