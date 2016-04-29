@@ -427,6 +427,7 @@ var scrollVis = function() {
 
     var sector = ["Electricity", "Manufacturing","Transportation", "Fuel Combustion","Fugitive Emissions", "Industrial Processes", "Agriculture", "Waste", "Land-Use", "Bunker Fuels"]
     var id = [1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012]
+    var emission = [0, 8000, 14000]
 
     var x = d3.scale.linear().range([0, width]);
     var y = d3.scale.linear().range([height, 0]);
@@ -440,6 +441,7 @@ var scrollVis = function() {
     var yAxis = d3.svg.axis().scale(y)
       .orient("left").ticks(6)
       .tickSize(width)
+      .tickFormat("")
       .outerTickSize(0)
         .orient("right");
      
@@ -516,7 +518,25 @@ var scrollVis = function() {
        .text("World Total CO2 Emissions by Sector(MtCO2)")
        .attr("x",150)
        .attr("y",-10)
-       .attr("font-size",20); 
+       .attr("font-size",20);
+
+      lineSvg.append("text")
+       .text("0")
+       .attr("x",-45)
+       .attr("y",153)
+       .attr("font-size",13);
+
+      lineSvg.append("text")
+       .text("14,000")
+       .attr("x",-45)
+       .attr("y",12)
+       .attr("font-size",13);
+
+      lineSvg.append("text")
+       .text("8,000")
+       .attr("x",-45)
+       .attr("y",72)
+       .attr("font-size",13);    
      
       // Add the Y Axis
       gy = lineSvg.append("g")    
@@ -548,7 +568,7 @@ var on = function (event) {
         lineSvg.append("text")
         .attr("id", year*2)
         .attr("x", 80)
-        .attr("dy", 150)
+        .attr("dy", 130)
         .attr("fill","#66A5AD")
         .text(year);
         };
@@ -792,7 +812,7 @@ function line(){
       domain_max = 100;
     } else {
       height = 250;
-      domain_max = 650;
+      domain_max = 655;
     }
     // console.log(height);
     var yScale = d3.scale.linear()
