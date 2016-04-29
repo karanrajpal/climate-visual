@@ -224,6 +224,7 @@ path {
   width: 50px;
   height: 200px;
   opacity: 0;
+  z-index: 91;
   -webkit-transition: all 0.6s;
 }
 .shown {
