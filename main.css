@@ -233,23 +233,30 @@ path {
 #description {
   z-index: 2000000;
   position: fixed;
-  top:150px;
+  top:130px;
   left:20px;
   font-size: 30px;
   color: #F1F1F2;
   text-align: left;
   width: 100%;
 }
-#explanation{
+#explanation, #explanation2 {
   z-index: 2000000;
   position: fixed;
-  top:250px;
+  top:200px;
   left:20px;
   font-size: 20px;
   color: #F1F1F2;
   text-align: center;
   text-align: justify;
   width: 90%;
+  font-weight: 100;
+}
+#explanation b, #explanation2 b {
+  font-weight: normal;
+}
+#explanation2 {
+  top: 300px;
 }
 
 #hint{
