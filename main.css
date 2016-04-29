@@ -47,9 +47,6 @@
   top: 60px;
   z-index: 1;
   margin-left: 0;
-  /* height: 600px; */
-  /* width: 600px; */
-  /* background-color: #ddd; */
 }
 #vis {
   opacity: 0;
@@ -109,11 +106,8 @@
 }
 .country-text {
   writing-mode: tb;
-  /*-webkit-transition: all 0.5s;*/
   font-size: 12px;
-  /*transform: rotate3d(30,20,40);*/
-  /*transform-origin: left top 0;*/
- /*transform="rotate(30 20,40)*/
+  
 }
 
 .smoke, .smokeduplicate, .thermsmoke {
@@ -133,33 +127,6 @@
 }
 
 
-/* Yuqing styles */
-.d3-tip {
-    line-height: 1;
-    font-weight: bold;
-    padding: 12px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    border-radius: 2px;
-  }
-  /*path {
-    stroke: steelblue;
-    stroke-width: 3;
-    fill: none;
-  }*/
-  .datapoint{fill: black;}
-  .datapoint:hover{
-fill:grey; opacity: 2; r: 20; }
-  
-  .xlabel, .ylabel {
-    font-weight:bold;
-    font-size:15px;
-  }
-  .graphtitle{
-    font-weight:bold;
-    font-size:20px;
-  }
-
 #SAMPLE {
   position: fixed;
   top: 10px;
@@ -170,8 +137,6 @@ fill:grey; opacity: 2; r: 20; }
   display: none;
 }
 
-
-/* Jiaming styles */
 path {
   fill: none;
 }
@@ -196,10 +161,6 @@ path {
 }
 .America {
   fill: #CF3721;
-  /*fill: orange;
-  color: orange;
-  background: orange;
-  stroke: aqua;*/
 }
 .Asia {
   fill: #F9BA32;
@@ -457,7 +418,6 @@ path {
 .tooltip rect {
   fill: #666;
   z-index: 500000000000;
-  /*stroke: #111;*/
 }
 .tooltip text {
   font-size: 12px;
