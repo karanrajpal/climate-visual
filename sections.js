@@ -193,6 +193,7 @@ var scrollVis = function() {
   var SECTION_LINE_SHOWING = false;
   var IS_SMOKE_SHOWING = false;
   var CURRENT_YEAR = 1990;
+  var CURRENT_TAB = 'CONTINENT';
 
   function showCountryEmissions() {
     var year = CURRENT_YEAR;
@@ -201,6 +202,9 @@ var scrollVis = function() {
     }
     var counter = -1;
     var newData = co2Data[(activeIndex-1)*2].values.sort( function(a,b) { return parseInt(b.co2) - parseInt(a.co2); } ).slice(1,11);
+    if(CURRENT_TAB=='CONTINENT') {
+      newData = newData.sort( function(a,b) { return a.continent.localeCompare(b.continent); });
+    }
     var newRank = [];
     var newCo2 = [];
     newData.forEach(function(d) {
@@ -886,7 +890,7 @@ function line(){
       }
 
       if(parentNum == 1) {
-        if(year=="") { year = 1990; }
+        if(year=="The End?" || year=="") { year = 1990; }
         if (year>2012) {
           var rect_height = data[year-1990].situation1;
           document.getElementsByClassName('thermsmoke'+parentNum)[0].style.width=co2ScaleBudget(rect_height)+'px';
@@ -898,6 +902,7 @@ function line(){
           document.getElementById('text_rect'+parentNum).innerHTML= rect_height+"%";
         }
         else {
+          if(year=="The End?" || year=="") { year = 1990; }
           var rect_height = data[year-1990].situation1;
           document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
           document.getElementById('outerRECT'+parentNum).setAttribute("fill", color_scale(rect_height));
@@ -908,7 +913,7 @@ function line(){
         }
       }
       else {
-        if(year=="") { year = 1990; }
+        if(year=="The End?" || year=="") { year = 1990; }
         var rect_height = data[year-1990].situation2;
         document.getElementsByClassName('thermsmoke'+parentNum)[0].style.width=co2ScaleBudget(rect_height)+'px';
         document.getElementById('innerRECT'+parentNum).setAttribute("height", yScale(rect_height));
