@@ -355,6 +355,34 @@ var scrollVis = function() {
             .attr('height', 20)
             .attr('rank',i)
             .attr('class','graph-icon');
+
+            svg.append("circle")
+            .attr("cx",880)
+            .attr("cy",390)
+            .attr("r",4)
+            .attr("fill","#cf3721");
+
+            svg.append("text").attr("x",890)
+            .attr("y",390).text("North America");
+
+            svg.append("circle")
+            .attr("cx",880)
+            .attr("cy",410)
+            .attr("r",4)
+            .attr("fill","#f9ba32");
+
+            svg.append("text").attr("x",890)
+            .attr("y",410).text("Asia");
+
+            svg.append("circle")
+            .attr("cx",880)
+            .attr("cy",430)
+            .attr("r",4)
+            .attr("fill","#4897d8");
+
+            svg.append("text").attr("x",890)
+            .attr("y",430).text("Europe");
+
           }
           existingSmoke[0][i].setAttribute('width',co2Scale(newData[i].co2));
           existingSmoke[0][i].setAttribute('height',co2Scale(newData[i].co2));
