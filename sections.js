@@ -193,7 +193,26 @@ var scrollVis = function() {
   var SECTION_LINE_SHOWING = false;
   var IS_SMOKE_SHOWING = false;
   var CURRENT_YEAR = 1990;
-  var CURRENT_TAB = 'CONTINENT';
+  var CURRENT_TAB = 'EMISSIONS';
+
+
+  document.addEventListener('click', function() {
+    // debugger;
+    if(event.target.id=='ranktab' || event.target.id=='continenttab') {
+      changeTab(event.target);
+    }
+  });
+  function changeTab(target) {
+    var active = document.getElementsByClassName('active')[0];
+    active.classList.remove('active');
+    target.classList.add('active');
+    if(target.id=='ranktab') {
+      CURRENT_TAB = 'EMISSIONS';
+    } else {
+      CURRENT_TAB = 'CONTINENT';
+    }
+    showCountryEmissions();
+  }
 
   function showCountryEmissions() {
     var year = CURRENT_YEAR;

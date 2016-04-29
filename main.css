@@ -441,7 +441,25 @@ path {
 #smokelable {
   position: fixed;
   top: 300px;
-  left: 350px;
+  left: 300px;
   font-size: 20px;
   color: black;
+}
+#continenttab, #ranktab {
+  font-size: 20px;
+  color: black;
+  padding: 10px;
+  position: fixed;
+  top: 290px;
+  left: 470px;
+  z-index: 50000000000000000;
+  cursor: pointer;
+  color: #999;
+}
+.active {
+  text-decoration: underline;
+  color: #520A0A !important;
+}
+#continenttab {
+  left: 530px;
 }
