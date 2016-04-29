@@ -233,8 +233,8 @@ path {
 #description {
   z-index: 2000000;
   position: fixed;
-  top:130px;
-  left:20px;
+  top: 120px;
+  left: 20px;
   font-size: 30px;
   color: #F1F1F2;
   text-align: left;
@@ -243,7 +243,7 @@ path {
 #explanation, #explanation2 {
   z-index: 2000000;
   position: fixed;
-  top:200px;
+  top:180px;
   left:20px;
   font-size: 20px;
   color: #F1F1F2;
@@ -256,13 +256,13 @@ path {
   font-weight: normal;
 }
 #explanation2 {
-  top: 300px;
+  top: 280px;
 }
 
 #hint{
   z-index: 2000000;
   position: fixed;
-  top:400px;
+  top:370px;
   left:0px;
   font-size: 15px;
   color: #F1F1F2;
@@ -285,7 +285,7 @@ path {
 #title {
   z-index: 2000000;
   position: fixed;
-  top: 40px;
+  top: 30px;
   font-size: 50px;
   font-family: "Arial Black";
   color: black;
@@ -304,7 +304,7 @@ path {
   z-index: 92;
 }
 #world1 .smoke {
-  top: 540px;
+  top: 570px;
   z-index: 92;
 }
 .small {
