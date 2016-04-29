@@ -304,6 +304,37 @@ var scrollVis = function() {
         });
 
 
+        svg.append("circle")
+            .attr("cx",900)
+            .attr("cy",440)
+            .attr("r",4)
+            .attr("fill","#cf3721");
+
+            svg.append("text").attr("x",910)
+            .attr("y",440).text("North America")
+            .attr("font-size", "10px");;
+
+            svg.append("circle")
+            .attr("cx",900)
+            .attr("cy",460)
+            .attr("r",4)
+            .attr("fill","#f9ba32");
+
+            svg.append("text").attr("x",910)
+            .attr("y",460).text("Asia")
+            .attr("font-size", "10px");
+
+            svg.append("circle")
+            .attr("cx",900)
+            .attr("cy",480)
+            .attr("r",4)
+            .attr("fill","#4897d8");
+
+            svg.append("text").attr("x",910)
+            .attr("y",480).text("Europe")
+            .attr("font-size", "10px");;
+
+
         SECTION_1_SHOWING = true;
     } else {
       if(!IS_SMOKE_SHOWING) {
@@ -355,6 +386,8 @@ var scrollVis = function() {
             .attr('height', 20)
             .attr('rank',i)
             .attr('class','graph-icon');
+
+            
           }
           existingSmoke[0][i].setAttribute('width',co2Scale(newData[i].co2));
           existingSmoke[0][i].setAttribute('height',co2Scale(newData[i].co2));
